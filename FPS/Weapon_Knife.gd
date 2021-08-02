@@ -4,6 +4,10 @@ const DAMAGE = 40
 
 const IDLE_ANIM_NAME = "Knife_idle"
 const FIRE_ANIM_NAME = "Knife_fire"
+const CAN_RELOAD = false
+const CAN_REFILL = false
+
+const RELOADING_ANIM_NAME = ""
 
 var is_weapon_enabled = false
 
@@ -42,4 +46,7 @@ func unequip_weapon():
 		is_weapon_enabled = false
 		return true
 
+	return false
+
+func reload_weapon():
 	return false
