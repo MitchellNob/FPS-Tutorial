@@ -1,13 +1,13 @@
 extends KinematicBody
 
-const GRAVITY = -24.8
+const GRAVITY = -22
 var vel = Vector3()
-const MAX_SPEED = 20
+const MAX_SPEED = 30
 const JUMP_SPEED = 18
-const ACCEL= 4.5
+const ACCEL= 3.5
 
-const MAX_SPRINT_SPEED = 30
-const SPRINT_ACCEL = 18
+const MAX_SPRINT_SPEED = 40
+const SPRINT_ACCEL = 15
 var is_sprinting = false
 
 var flashlight
@@ -160,11 +160,14 @@ func process_input(delta):
 	# Firing the weapons
 	if Input.is_action_pressed("fire"):
 		if changing_weapon == false:
-			var current_weapon = weapons[current_weapon_name]
-			if current_weapon != null:
-				if current_weapon.ammo_in_weapon > 0:
-					if animation_manager.current_state == current_weapon.IDLE_ANIM_NAME:
-						animation_manager.set_animation(current_weapon.FIRE_ANIM_NAME)
+			if reloading_weapon == false:
+				var current_weapon = weapons[current_weapon_name]
+				if current_weapon != null:
+					if current_weapon.ammo_in_weapon > 0:
+						if animation_manager.current_state == current_weapon.IDLE_ANIM_NAME:
+							animation_manager.set_animation(current_weapon.FIRE_ANIM_NAME)
+					else:
+						reloading_weapon = true
 	# ----------------------------------
 	
 	# ----------------------------------
@@ -182,21 +185,8 @@ func process_input(delta):
 							if weapon_node != null:
 								if current_anim_state == weapon_node.RELOADING_ANIM_NAME:
 									is_reloading = true
-									if is_reloading == false:
-										reloading_weapon = true
-	# ----------------------------------
-	
-	# ----------------------------------
-	# Firing the weapons
-	if Input.is_action_pressed("fire"):
-		if changing_weapon == false:
-			var current_weapon = weapons[current_weapon_name]
-			if current_weapon != null:
-				if current_weapon.ammo_in_weapon > 0:
-					if animation_manager.current_state == current_weapon.IDLE_ANIM_NAME:
-						animation_manager.set_animation(current_weapon.FIRE_ANIM_NAME)
-					else:
-						reloading_weapon = true
+						if is_reloading == false:
+							reloading_weapon = true
 	# ----------------------------------
 
 func process_movement(delta):
