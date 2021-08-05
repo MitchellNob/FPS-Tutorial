@@ -5,6 +5,7 @@ var vel = Vector3()
 const MAX_SPEED = 30
 const JUMP_SPEED = 18
 const ACCEL= 3.5
+const MAX_HEALTH = 150
 
 const MAX_SPRINT_SPEED = 40
 const SPRINT_ACCEL = 15
@@ -36,6 +37,12 @@ var health = 100
 var UI_status_label
 
 var reloading_weapon = false
+
+var JOYPAD_SENSITIVITY = 2
+const JOYPAD_DEADZONE = 0.15
+
+var mouse_scroll_value = 0
+const MOUSE_SENSITIVITY_SCROLL_WHEEL = 0.08
 
 func _ready():
 	camera = $Rotation_Helper/Camera
@@ -91,6 +98,20 @@ func process_input(delta):
 		input_movement_vector.x = 1
 
 	input_movement_vector = input_movement_vector.normalized()
+	
+	if Input.get_connected_joypads().size() > 0:
+		var joypad_vec = Vector2(0, 0)
+		if OS.get_name() == "Windows":
+			joypad_vec = Vector2(Input.get_joy_axis(0, 0), -Input.get_joy_axis(0, 1))
+		elif OS.get_name() == "X11":
+			joypad_vec = Vector2(Input.get_joy_axis(0, 1), Input.get_joy_axis(0, 2))
+		elif OS.get_name() == "OSX":
+			joypad_vec = Vector2(Input.get_joy_axis(0, 1), Input.get_joy_axis(0, 2))
+		if joypad_vec.length() < JOYPAD_DEADZONE:
+			joypad_vec = Vector2(0, 0)
+		else:
+			joypad_vec = joypad_vec.normalized() * ((joypad_vec.length() - JOYPAD_DEADZONE) / (1 - JOYPAD_DEADZONE))
+			input_movement_vector += joypad_vec
 
 	dir += -cam_xform.basis.z.normalized() * input_movement_vector.y
 	dir += cam_xform.basis.x.normalized() * input_movement_vector.x
@@ -154,6 +175,7 @@ func process_input(delta):
 			if WEAPON_NUMBER_TO_NAME[weapon_change_number] != current_weapon_name:
 				changing_weapon_name = WEAPON_NUMBER_TO_NAME[weapon_change_number]
 				changing_weapon = true
+				mouse_scroll_value = weapon_change_number
 	# ----------------------------------
 	
 	# ----------------------------------
@@ -187,6 +209,32 @@ func process_input(delta):
 									is_reloading = true
 						if is_reloading == false:
 							reloading_weapon = true
+	# ----------------------------------
+	
+func process_view_input(delta):
+	if Input.get_mouse_mode() != Input.MOUSE_MODE_CAPTURED:
+		return
+
+	# ----------------------------------
+	# Joypad rotation
+	var joypad_vec = Vector2()
+	if Input.get_connected_joypads().size() > 0:
+		if OS.get_name() == "Windows":
+			joypad_vec = Vector2(Input.get_joy_axis(0, 2), Input.get_joy_axis(0, 3))
+		elif OS.get_name() == "X11":
+			joypad_vec = Vector2(Input.get_joy_axis(0, 3), Input.get_joy_axis(0, 4))
+		elif OS.get_name() == "OSX":
+			joypad_vec = Vector2(Input.get_joy_axis(0, 3), Input.get_joy_axis(0, 4))
+		if joypad_vec.length() < JOYPAD_DEADZONE:
+			joypad_vec = Vector2(0, 0)
+		else:
+			joypad_vec = joypad_vec.normalized() * ((joypad_vec.length() - JOYPAD_DEADZONE) / (1 - JOYPAD_DEADZONE))
+
+		rotation_helper.rotate_x(deg2rad(joypad_vec.y * JOYPAD_SENSITIVITY))
+		rotate_y(deg2rad(joypad_vec.x * JOYPAD_SENSITIVITY * -1))
+		var camera_rot = rotation_helper.rotation_degrees
+		camera_rot.x = clamp(camera_rot.x, -70, 70)
+		rotation_helper.rotation_degrees = camera_rot
 	# ----------------------------------
 
 func process_movement(delta):
@@ -261,6 +309,23 @@ func _input(event):
 		camera_rot.x = clamp(camera_rot.x, -70, 70)
 		rotation_helper.rotation_degrees = camera_rot
 
+	if event is InputEventMouseButton and Input.get_mouse_mode() == Input.MOUSE_MODE_CAPTURED:
+		if event.button_index == BUTTON_WHEEL_UP or event.button_index == BUTTON_WHEEL_DOWN:
+			if event.button_index == BUTTON_WHEEL_UP:
+				mouse_scroll_value += MOUSE_SENSITIVITY_SCROLL_WHEEL
+			elif event.button_index == BUTTON_WHEEL_DOWN:
+				mouse_scroll_value -= MOUSE_SENSITIVITY_SCROLL_WHEEL
+
+				mouse_scroll_value = clamp(mouse_scroll_value, 0, WEAPON_NUMBER_TO_NAME.size() - 1)
+
+				if changing_weapon == false:
+					if reloading_weapon == false:
+						var round_mouse_scroll_value = int(round(mouse_scroll_value))
+						if WEAPON_NUMBER_TO_NAME[round_mouse_scroll_value] != current_weapon_name:
+							changing_weapon_name = WEAPON_NUMBER_TO_NAME[round_mouse_scroll_value]
+							changing_weapon = true
+							mouse_scroll_value = round_mouse_scroll_value
+
 func fire_bullet():
 	if changing_weapon == true:
 		return
@@ -281,3 +346,7 @@ func process_reloading(delta):
 		if current_weapon != null:
 			current_weapon.reload_weapon()
 		reloading_weapon = false
+
+func add_health(additional_health):
+	health += additional_health
+	health = clamp(health, 0, MAX_HEALTH)
