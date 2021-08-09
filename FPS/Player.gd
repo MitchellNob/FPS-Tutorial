@@ -44,6 +44,12 @@ const JOYPAD_DEADZONE = 0.15
 var mouse_scroll_value = 0
 const MOUSE_SENSITIVITY_SCROLL_WHEEL = 0.08
 
+var grenade_amounts = {"Grenade":2, "Sticky Grenade":2}
+var current_grenade = "Grenade"
+var grenade_scene = preload("res://Grenade.tscn")
+var sticky_grenade_scene = preload("res://Sticky_Grenade.tscn")
+const GRENADE_THROW_FORCE = 50
+
 func _ready():
 	camera = $Rotation_Helper/Camera
 	rotation_helper = $Rotation_Helper
@@ -236,6 +242,31 @@ func process_view_input(delta):
 		camera_rot.x = clamp(camera_rot.x, -70, 70)
 		rotation_helper.rotation_degrees = camera_rot
 	# ----------------------------------
+	
+	# ----------------------------------
+	# Changing and throwing grenades
+
+	if Input.is_action_just_pressed("change_grenade"):
+		if current_grenade == "Grenade":
+			current_grenade = "Sticky Grenade"
+		elif current_grenade == "Sticky Grenade":
+			current_grenade = "Grenade"
+	
+	if Input.is_action_just_pressed("fire_grenade"):
+		if grenade_amounts[current_grenade] > 0:
+			grenade_amounts[current_grenade] -= 1
+			
+			var grenade_clone
+			if current_grenade == "Grenade":
+				grenade_clone = grenade_scene.instance()
+			elif current_grenade == "Sticky Grenade":
+				grenade_clone = sticky_grenade_scene.instance()
+				grenade_clone.player_body = self
+			
+			get_tree().root.add_child(grenade_clone)
+			grenade_clone.global_transform = $Rotation_Helper/Grenade_Toss_Pos.global_transform
+			grenade_clone.apply_impulse(Vector3(0, 0, 0), grenade_clone.global_transform.basis.z * GRENADE_THROW_FORCE)
+# ----------------------------------
 
 func process_movement(delta):
 	dir.y = 0
