@@ -48,6 +48,7 @@ var grenade_amounts = {"Grenade":2, "Sticky Grenade":2}
 var current_grenade = "Grenade"
 var grenade_scene = preload("res://Grenade.tscn")
 var sticky_grenade_scene = preload("res://Sticky_Grenade.tscn")
+
 const GRENADE_THROW_FORCE = 50
 
 func _ready():
@@ -365,11 +366,13 @@ func fire_bullet():
 
 func process_UI(delta):
 	if current_weapon_name == "UNARMED" or current_weapon_name == "KNIFE":
-		UI_status_label.text = "HEALTH: " + str(health)
+		UI_status_label.text = "HEALTH: " + str(health) + \
+				"\n" + current_grenade + ": " + str(grenade_amounts[current_grenade])
 	else:
-			var current_weapon = weapons[current_weapon_name]
-			UI_status_label.text = "HEALTH: " + str(health) + \
-			"\nAMMO: " + str(current_weapon.ammo_in_weapon) + "/" + str(current_weapon.spare_ammo)
+		var current_weapon = weapons[current_weapon_name]
+		UI_status_label.text = "HEALTH: " + str(health) + \
+				"\nAMMO: " + str(current_weapon.ammo_in_weapon) + "/" + str(current_weapon.spare_ammo) + \
+				"\n" + current_grenade + ": " + str(grenade_amounts[current_grenade])
 
 func process_reloading(delta):
 	if reloading_weapon == true:
@@ -386,3 +389,7 @@ func add_ammo(additional_ammo):
 	if (current_weapon_name != "UNARMED"):
 		if (weapons[current_weapon_name].CAN_REFILL == true):
 			weapons[current_weapon_name].spare_ammo += weapons[current_weapon_name].AMMO_IN_MAG * additional_ammo
+
+func add_grenade(additional_grenade):
+	grenade_amounts[current_grenade] += additional_grenade
+	grenade_amounts[current_grenade] = clamp(grenade_amounts[current_grenade], 0, 4)
