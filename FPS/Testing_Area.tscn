@@ -1,10 +1,11 @@
-[gd_scene load_steps=23 format=2]
+[gd_scene load_steps=24 format=2]
 
 [ext_resource path="res://Player.tscn" type="PackedScene" id=1]
 [ext_resource path="res://RigidBody_hit_test.gd" type="Script" id=2]
 [ext_resource path="res://Health_Pickup.tscn" type="PackedScene" id=3]
 [ext_resource path="res://Ammo_Pickup.tscn" type="PackedScene" id=4]
 [ext_resource path="res://Target.tscn" type="PackedScene" id=5]
+[ext_resource path="res://Turret.tscn" type="PackedScene" id=6]
 
 [sub_resource type="PlaneMesh" id=1]
 size = Vector2( 80, 80 )
@@ -339,4 +340,13 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 28.3505, 30.7699, 37.9993 )
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 20.1643, 16.2673, -6.65968 )
 
 [node name="Health_Pickup" parent="." instance=ExtResource( 3 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 22.4296, 5.45863, 4.1208 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 22.7913, 5.58016, 4.89642 )
+
+[node name="Target_Whole2" parent="." instance=ExtResource( 5 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 22.5027, 11.3482, 36.4754 )
+
+[node name="Turret" parent="Target_Whole2" instance=ExtResource( 6 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -48.3111, -10.7109, -64.0034 )
+
+[node name="Turret" parent="Target_Whole2/Turret" instance=ExtResource( 6 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 50.8465, 0.583539, 58.2035 )

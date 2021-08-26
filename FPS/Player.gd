@@ -1,4 +1,4 @@
-extends KinematicBody
+	extends KinematicBody
 
 const GRAVITY = -22
 var vel = Vector3()
@@ -48,42 +48,50 @@ var grenade_amounts = {"Grenade":2, "Sticky Grenade":2}
 var current_grenade = "Grenade"
 var grenade_scene = preload("res://Grenade.tscn")
 var sticky_grenade_scene = preload("res://Sticky_Grenade.tscn")
-
 const GRENADE_THROW_FORCE = 50
+
+var grabbed_object = null
+const OBJECT_THROW_FORCE = 120
+const OBJECT_GRAB_DISTANCE = 7
+const OBJECT_GRAB_RAY_DISTANCE = 10
 
 func _ready():
 	camera = $Rotation_Helper/Camera
 	rotation_helper = $Rotation_Helper
-
+	
 	animation_manager = $Rotation_Helper/Model/Animation_Player
 	animation_manager.callback_function = funcref(self, "fire_bullet")
-
+	
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
-
+	
 	weapons["KNIFE"] = $Rotation_Helper/Gun_Fire_Points/Knife_Point
 	weapons["PISTOL"] = $Rotation_Helper/Gun_Fire_Points/Pistol_Point
 	weapons["RIFLE"] = $Rotation_Helper/Gun_Fire_Points/Rifle_Point
-
+	
 	var gun_aim_point_pos = $Rotation_Helper/Gun_Aim_Point.global_transform.origin
-
+	
 	for weapon in weapons:
 		var weapon_node = weapons[weapon]
 		if weapon_node != null:
 			weapon_node.player_node = self
 			weapon_node.look_at(gun_aim_point_pos, Vector3(0, 1, 0))
 			weapon_node.rotate_object_local(Vector3(0, 1, 0), deg2rad(180))
-
+	
 	current_weapon_name = "UNARMED"
 	changing_weapon_name = "UNARMED"
-
+	
 	UI_status_label = $HUD/Panel/Gun_label
 	flashlight = $Rotation_Helper/Flashlight
 
 func _physics_process(delta):
 	process_input(delta)
+	process_view_input(delta)
 	process_movement(delta)
-	process_changing_weapons(delta)
-	process_reloading(delta)
+	
+	if grabbed_object == null:
+		process_changing_weapons(delta)
+		process_reloading(delta)
+	 # Process the UI
 	process_UI(delta)
 
 func process_input(delta):
@@ -267,6 +275,40 @@ func process_view_input(delta):
 			get_tree().root.add_child(grenade_clone)
 			grenade_clone.global_transform = $Rotation_Helper/Grenade_Toss_Pos.global_transform
 			grenade_clone.apply_impulse(Vector3(0, 0, 0), grenade_clone.global_transform.basis.z * GRENADE_THROW_FORCE)
+# ----------------------------------
+
+# ----------------------------------
+# Grabbing and throwing objects
+
+	if Input.is_action_just_pressed("Grab") and current_weapon_name == "UNARMED":
+		if grabbed_object == null:
+			var state = get_world().direct_space_state
+	
+			var center_position = get_viewport().size / 2
+			var ray_from = camera.project_ray_origin(center_position)
+			var ray_to = ray_from + camera.project_ray_normal(center_position) * OBJECT_GRAB_RAY_DISTANCE
+			
+			var ray_result = state.intersect_ray(ray_from, ray_to, [self, $Rotation_Helper/Gun_Fire_Points/Knife_Point/Area])
+			if !ray_result.empty():
+				if ray_result["collider"] is RigidBody:
+					grabbed_object = ray_result["collider"]
+					grabbed_object.mode = RigidBody.MODE_STATIC
+					
+					grabbed_object.collision_layer = 0
+					grabbed_object.collision_mask = 0
+	
+		else:
+			grabbed_object.mode = RigidBody.MODE_RIGID
+			
+			grabbed_object.apply_impulse(Vector3(0, 0, 0), -camera.global_transform.basis.z.normalized() * OBJECT_THROW_FORCE)
+			
+			grabbed_object.collision_layer = 1
+			grabbed_object.collision_mask = 1
+			
+			grabbed_object = null
+	
+	if grabbed_object != null:
+		grabbed_object.global_transform.origin = camera.global_transform.origin + (-camera.global_transform.basis.z.normalized() * OBJECT_GRAB_DISTANCE)
 # ----------------------------------
 
 func process_movement(delta):
