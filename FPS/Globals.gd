@@ -13,12 +13,35 @@ const MAIN_MENU_PATH = "res://Main_Menu.tscn"
 const POPUP_SCENE = preload("res://Pause_Popup.tscn")
 var popup = null
 
+var respawn_points = null
+
+# All the audio files.
+
+# You will need to provide your own sound files.
+var audio_clips = {
+	"Pistol_shot": null, #preload("res://path_to_your_audio_here!")
+	"Rifle_shot": null, #preload("res://path_to_your_audio_here!")
+	"Gun_cock": null, #preload("res://path_to_your_audio_here!")
+}
+
+const SIMPLE_AUDIO_PLAYER_SCENE = preload("res://Simple_Audio_Player.tscn")
+var created_audio = []
+
 func _ready():
+	
+	randomize()
+	
 	canvas_layer = CanvasLayer.new()
 	add_child(canvas_layer)
 
 func load_new_scene(new_scene_path):
 	get_tree().change_scene(new_scene_path)
+	respawn_points = null
+	
+	for sound in created_audio:
+		if (sound != null):
+			sound.queue_free()
+	created_audio.clear()
 
 func set_debug_display(display_on):
 	if display_on == false:
@@ -63,3 +86,23 @@ func popup_quit():
 		popup = null
 	
 	load_new_scene(MAIN_MENU_PATH)
+
+func get_respawn_position():
+	if respawn_points == null:
+		return Vector3(0, 0, 0)
+	else:
+		var respawn_point = rand_range(0, respawn_points.size() - 1)
+		return respawn_points[respawn_point].global_transform.origin
+
+func play_sound(sound_name, loop_sound=false, sound_position=null):
+	if audio_clips.has(sound_name):
+		var new_audio = SIMPLE_AUDIO_PLAYER_SCENE.instance()
+		new_audio.should_loop = loop_sound
+
+		add_child(new_audio)
+		created_audio.append(new_audio)
+
+		new_audio.play_sound(audio_clips[sound_name], sound_position)
+
+	else:
+		print ("ERROR: cannot play sound that does not exist in audio_clips!")

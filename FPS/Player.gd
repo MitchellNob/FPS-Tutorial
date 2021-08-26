@@ -1,30 +1,27 @@
 	extends KinematicBody
 
+#Physics
 const GRAVITY = -22
 var vel = Vector3()
 const MAX_SPEED = 30
 const JUMP_SPEED = 18
 const ACCEL= 3.5
-const MAX_HEALTH = 150
-
 const MAX_SPRINT_SPEED = 40
 const SPRINT_ACCEL = 15
 var is_sprinting = false
-
-var flashlight
-
-var dir = Vector3()
-
 const DEACCEL= 16
 const MAX_SLOPE_ANGLE = 40
 
+#Camera
+var dir = Vector3()
 var camera
 var rotation_helper
 
+#Mouse Sens
 var MOUSE_SENSITIVITY = 0.05
 
+#Weapon Changing System
 var animation_manager
-
 var current_weapon_name = "UNARMED"
 var weapons = {"UNARMED":null, "KNIFE":null, "PISTOL":null, "RIFLE":null}
 const WEAPON_NUMBER_TO_NAME = {0:"UNARMED", 1:"KNIFE", 2:"PISTOL", 3:"RIFLE"}
@@ -32,30 +29,48 @@ const WEAPON_NAME_TO_NUMBER = {"UNARMED":0, "KNIFE":1, "PISTOL":2, "RIFLE":3}
 var changing_weapon = false
 var changing_weapon_name = "UNARMED"
 
+#Health
+const MAX_HEALTH = 150
 var health = 100
 
-var UI_status_label
+#Miscellaenous
+var UI_status_label 
+var globals
+var flashlight
 
+#Reloading
 var reloading_weapon = false
 
+#Joypad Sensitivity
 var JOYPAD_SENSITIVITY = 2
 const JOYPAD_DEADZONE = 0.15
 
+#Mouse Scrolling
 var mouse_scroll_value = 0
 const MOUSE_SENSITIVITY_SCROLL_WHEEL = 0.08
 
+#Grenade System
 var grenade_amounts = {"Grenade":2, "Sticky Grenade":2}
 var current_grenade = "Grenade"
 var grenade_scene = preload("res://Grenade.tscn")
 var sticky_grenade_scene = preload("res://Sticky_Grenade.tscn")
 const GRENADE_THROW_FORCE = 50
 
+#Grabbing System
 var grabbed_object = null
 const OBJECT_THROW_FORCE = 120
 const OBJECT_GRAB_DISTANCE = 7
 const OBJECT_GRAB_RAY_DISTANCE = 10
 
+#Respawn System
+const RESPAWN_TIME = 4
+var dead_time = 0
+var is_dead = false
+
 func _ready():
+	globals = get_node("/root/Globals")
+	global_transform.origin = globals.get_respawn_position()
+	
 	camera = $Rotation_Helper/Camera
 	rotation_helper = $Rotation_Helper
 	
@@ -84,15 +99,18 @@ func _ready():
 	flashlight = $Rotation_Helper/Flashlight
 
 func _physics_process(delta):
-	process_input(delta)
-	process_view_input(delta)
-	process_movement(delta)
+	
+	if !is_dead:
+		process_input(delta)
+		process_view_input(delta)
+		process_movement(delta)
 	
 	if grabbed_object == null:
 		process_changing_weapons(delta)
 		process_reloading(delta)
-	 # Process the UI
+	 
 	process_UI(delta)
+	process_respawn(delta)
 
 func process_input(delta):
 
@@ -373,6 +391,10 @@ func process_changing_weapons(delta):
 
 
 func _input(event):
+	
+	if is_dead:
+		return
+	
 	if event is InputEventMouseMotion and Input.get_mouse_mode() == Input.MOUSE_MODE_CAPTURED:
 		rotation_helper.rotate_x(deg2rad(event.relative.y * MOUSE_SENSITIVITY))
 		self.rotate_y(deg2rad(event.relative.x * MOUSE_SENSITIVITY * -1))
@@ -433,3 +455,61 @@ func add_ammo(additional_ammo):
 func add_grenade(additional_grenade):
 	grenade_amounts[current_grenade] += additional_grenade
 	grenade_amounts[current_grenade] = clamp(grenade_amounts[current_grenade], 0, 4)
+
+func process_respawn(delta):
+
+	# If we've just died
+	if health <= 0 and !is_dead:
+		$Body_CollisionShape.disabled = true
+		$Feet_CollisionShape.disabled = true
+	
+		changing_weapon = true
+		changing_weapon_name = "UNARMED"
+	
+		$HUD/Death_Screen.visible = true
+	
+		$HUD/Panel.visible = false
+		$HUD/Crosshair.visible = false
+	
+		dead_time = RESPAWN_TIME
+		is_dead = true
+	
+		if grabbed_object != null:
+			grabbed_object.mode = RigidBody.MODE_RIGID
+			grabbed_object.apply_impulse(Vector3(0, 0, 0), -camera.global_transform.basis.z.normalized() * OBJECT_THROW_FORCE / 2)
+	
+			grabbed_object.collision_layer = 1
+			grabbed_object.collision_mask = 1
+	
+			grabbed_object = null
+	
+	if is_dead:
+		dead_time -= delta
+	
+		var dead_time_pretty = str(dead_time).left(3)
+		$HUD/Death_Screen/Label.text = "You died\n" + dead_time_pretty + " seconds till respawn"
+	
+		if dead_time <= 0:
+			global_transform.origin = globals.get_respawn_position()
+	
+			$Body_CollisionShape.disabled = false
+			$Feet_CollisionShape.disabled = false
+	
+			$HUD/Death_Screen.visible = false
+	
+			$HUD/Panel.visible = true
+			$HUD/Crosshair.visible = true
+	
+			for weapon in weapons:
+				var weapon_node = weapons[weapon]
+				if weapon_node != null:
+					weapon_node.reset_weapon()
+	
+			health = 100
+			grenade_amounts = {"Grenade":2, "Sticky Grenade":2}
+			current_grenade = "Grenade"
+	
+			is_dead = false
+
+func create_sound(sound_name, position=null):
+	globals.play_sound(sound_name, false, position)
