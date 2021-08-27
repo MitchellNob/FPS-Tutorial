@@ -5,7 +5,7 @@
 [ext_resource path="res://FPS_project_icon.png" type="Texture" id=3]
 [ext_resource path="res://assets/Space_Level_Objects/SpaceThumbnail.png" type="Texture" id=4]
 [ext_resource path="res://assets/Ruin_Level_Objects/RuinsThumbnail.png" type="Texture" id=5]
-[ext_resource path="res://Main_Menu.gd" type="Script" id=6]
+[ext_resource path="res://Scripts/Main_Menu.gd" type="Script" id=6]
 
 [sub_resource type="PanoramaSky" id=1]
 radiance_size = 0
@@ -70,7 +70,7 @@ script = ExtResource( 6 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
-testing_area_scene = "res://Testing_Area.tscn"
+testing_area_scene = "res://Scenes/Testing_Area.tscn"
 space_level_scene = "res://assets/Space_Level_Objects/Space_Level.tscn"
 ruins_level_scene = "res://assets/Ruin_Level_Objects/Ruins_Level.tscn"
 

@@ -6,11 +6,11 @@ var joypad_sensitivity = 2
 # All the GUI/UI-related variables
 var canvas_layer = null
 
-const DEBUG_DISPLAY_SCENE = preload("res://Debug_Display.tscn")
+const DEBUG_DISPLAY_SCENE = preload("res://Scenes/Debug_Display.tscn")
 var debug_display = null
 
-const MAIN_MENU_PATH = "res://Main_Menu.tscn"
-const POPUP_SCENE = preload("res://Pause_Popup.tscn")
+const MAIN_MENU_PATH = "res://Scenes/Main_Menu.tscn"
+const POPUP_SCENE = preload("res://Scenes/Pause_Popup.tscn")
 var popup = null
 
 var respawn_points = null
@@ -20,7 +20,7 @@ var audio_clips = {
 	"rifle_shot": preload("res://Audio/AR.mp3"),
 }
 
-const SIMPLE_AUDIO_PLAYER_SCENE = preload("res://Simple_Audio_Player.tscn")
+const SIMPLE_AUDIO_PLAYER_SCENE = preload("res://Scenes/Simple_Audio_Player.tscn")
 var created_audio = []
 
 func _ready():
