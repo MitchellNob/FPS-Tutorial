@@ -15,13 +15,9 @@ var popup = null
 
 var respawn_points = null
 
-# All the audio files.
-
-# You will need to provide your own sound files.
 var audio_clips = {
-	"Pistol_shot": null, #preload("res://path_to_your_audio_here!")
-	"Rifle_shot": null, #preload("res://path_to_your_audio_here!")
-	"Gun_cock": null, #preload("res://path_to_your_audio_here!")
+	"pistol_shot": preload("res://Audio/Handgun.mp3"),
+	"rifle_shot": preload("res://Audio/AR.mp3"),
 }
 
 const SIMPLE_AUDIO_PLAYER_SCENE = preload("res://Simple_Audio_Player.tscn")
