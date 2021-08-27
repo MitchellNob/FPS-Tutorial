@@ -1,7 +1,10 @@
 extends AnimationPlayer
 
 # Structure -> Animation name :[Connecting Animation states]
-var states = {
+var states = { 
+	#States are used as a dictionary, the different animations are listed on the side
+	#then the array to the right og the different animations are the animations
+	#that the original animations can transition to
 	"Idle_unarmed":["Knife_equip", "Pistol_equip", "Rifle_equip", "Idle_unarmed"],
 
 	"Pistol_equip":["Pistol_idle"],
@@ -23,6 +26,8 @@ var states = {
 }
 
 var animation_speeds = {
+	#Animation speed is very self explanatory
+	#it shows how long an animation will play for
 	"Idle_unarmed":1,
 
 	"Pistol_equip":1.4,
@@ -43,19 +48,19 @@ var animation_speeds = {
 	"Knife_unequip":1,
 }
 
-var current_state = null
+var current_state = null #set the variable to nothing
 var callback_function = null
 
 func _ready():
-	set_animation("Idle_unarmed")
-	connect("animation_finished", self, "animation_ended")
+	set_animation("Idle_unarmed") #we use set animation to make this the animation we start in
+	connect("animation_finished", self, "animation_ended") #by using the connect statement we can make it so that whenever animation finished is signalled in the script it calls animation ended
 
-func set_animation(animation_name):
-	if animation_name == current_state:
-		print ("AnimationPlayer_Manager.gd -- WARNING: animation is already ", animation_name)
-		return true
+func set_animation(animation_name):# this makes it so that that if the animation we currently have going has one of the animations 
+	if animation_name == current_state: # and if the animation name is equal to the current state
+		print ("AnimationPlayer_Manager.gd -- WARNING: animation is already ", animation_name) #send a message saying that this animation is already playing 
+		return true 
 
-
+#We then check to see if the AnimationPlayer has the animation with animation name, if it doesn't it returns as false
 	if has_animation(animation_name):
 		if current_state != null:
 			var possible_animations = states[current_state]

@@ -1,24 +1,24 @@
 	extends KinematicBody
 
 #Physics
-const GRAVITY = -50
-var vel = Vector3()
-const MAX_SPEED = 30
-const JUMP_SPEED = 30
-const ACCEL= 3.5
-const MAX_SPRINT_SPEED = 40
-const SPRINT_ACCEL = 15
-var is_sprinting = false
-const DEACCEL= 16
-const MAX_SLOPE_ANGLE = 40
+const GRAVITY = -50 #Constant Variable tells us how fast we are being pulled down
+var vel = Vector3() #Variable that keeps track of our kinematic bodies velocity
+const MAX_SPEED = 30 #Constant Variable that tells us our maximum speed
+const JUMP_SPEED = 30 #Constant Variable that tells us our maximum jump
+const ACCEL= 3.5 #Constant Variable that tells us how quickly we accelerate
+const MAX_SPRINT_SPEED = 40 #Constant Variable that tells us how quickly we can go while sprinting
+const SPRINT_ACCEL = 15 # Constant Variable that tells us how fast we accelerate to max sprinting speed
+var is_sprinting = false #Boolean that tells us if we are sprinting or not
+const DEACCEL= 16 #Constant Variable that tells us how quickly we going to deaccelerate
+const MAX_SLOPE_ANGLE = 40 #Constant Variable that tells us how the steepest angle we can walk on
 
 #Camera
-var dir = Vector3()
-var camera
-var rotation_helper
+var dir = Vector3() # 
+var camera #The camera node
+var rotation_helper #Node that holds all of the things that rotate on the x axis
 
 #Mouse Sens
-var MOUSE_SENSITIVITY = 0.05
+var MOUSE_SENSITIVITY = 0.05 #Variable for how sensitive the mouse is set default to 0.05
 
 #Weapon Changing System
 var animation_manager
@@ -30,29 +30,29 @@ var changing_weapon = false
 var changing_weapon_name = "UNARMED"
 
 #Health
-const MAX_HEALTH = 150
-var health = 100
+const MAX_HEALTH = 150 # Constant Variable for your maximum health
+var health = 100 #Variable for how much health you have set 100 to default
 
 #Miscellaenous
-var UI_status_label 
+var UI_status_label #
 var globals
-var flashlight
+var flashlight #Flashlight node
 
 #Reloading
-var reloading_weapon = false
+var reloading_weapon = false #Boolean to tell us whether or not the weapon is reloading
 
 #Joypad Sensitivity
-var JOYPAD_SENSITIVITY = 2
-const JOYPAD_DEADZONE = 0.15
+var JOYPAD_SENSITIVITY = 2 #Joypad sensitivity default set to 2
+const JOYPAD_DEADZONE = 0.15 #Constant Variable this is the deadzone of the controller
 
 #Mouse Scrolling
 var mouse_scroll_value = 0
 const MOUSE_SENSITIVITY_SCROLL_WHEEL = 0.08
 
 #Grenade System
-var grenade_amounts = {"Grenade":2, "Sticky Grenade":2}
+var grenade_amounts = {"Grenade":2, "Sticky Grenade":2} 
 var current_grenade = "Grenade"
-var grenade_scene = preload("res://Scenes/Grenade.tscn")
+var grenade_scene = preload("res://Scenes/Grenade.tscn") #this variable preloads the scene so that befroe the game starts the scene is already loaded and ready to be instantiated without an hiccups
 var sticky_grenade_scene = preload("res://Scenes/Sticky_Grenade.tscn")
 const GRENADE_THROW_FORCE = 50
 
@@ -71,13 +71,14 @@ func _ready():
 	globals = get_node("/root/Globals")
 	global_transform.origin = globals.get_respawn_position()
 	
+	#Stores the Camera and Rotation helper nodes into their variables
 	camera = $Rotation_Helper/Camera
 	rotation_helper = $Rotation_Helper
 	
 	animation_manager = $Rotation_Helper/Model/Animation_Player
 	animation_manager.callback_function = funcref(self, "fire_bullet")
 	
-	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED) #This ensures that the mouse cannot move away from the game window
 	
 	weapons["KNIFE"] = $Rotation_Helper/Gun_Fire_Points/Knife_Point
 	weapons["PISTOL"] = $Rotation_Helper/Gun_Fire_Points/Pistol_Point
@@ -96,19 +97,24 @@ func _ready():
 	changing_weapon_name = "UNARMED"
 	
 	UI_status_label = $HUD/Panel/Gun_label
+	
+	#assigns the flashlight node to the variable
 	flashlight = $Rotation_Helper/Flashlight
 
 func _physics_process(delta):
 	
-	if !is_dead:
+	#If you are not dead call all 3 of these functions to store code
+	if !is_dead: 
 		process_input(delta)
 		process_view_input(delta)
 		process_movement(delta)
 	
+	#If you are not holding an object you are allowed to change weapons and reload
 	if grabbed_object == null:
 		process_changing_weapons(delta)
 		process_reloading(delta)
 	 
+	#These two functions do not require parameters to start so they should run no matter what.
 	process_UI(delta)
 	process_respawn(delta)
 
@@ -116,11 +122,12 @@ func process_input(delta):
 
 	# ----------------------------------
 	# Walking
-	dir = Vector3()
-	var cam_xform = camera.get_global_transform()
-
-	var input_movement_vector = Vector2()
-
+	dir = Vector3() #set the directioin to an empty vector3 so that it can move in a 3D axis
+	var cam_xform = camera.get_global_transform() #we get the cameras coordinats and then put it into a variable
+	
+	var input_movement_vector = Vector2() #we set a vector2 into a variable so that we can move on 2D axis
+	
+	#If we press WASD it moves us in the corresponding direction by adding or subtracting one to the corresponding axis on the 2D plane
 	if Input.is_action_pressed("movement_forward"):
 		input_movement_vector.y += 1
 	if Input.is_action_pressed("movement_backward"):
@@ -145,13 +152,16 @@ func process_input(delta):
 		else:
 			joypad_vec = joypad_vec.normalized() * ((joypad_vec.length() - JOYPAD_DEADZONE) / (1 - JOYPAD_DEADZONE))
 			input_movement_vector += joypad_vec
-
+	
+	#We add the cameras local z axis timesed by the input movement vector in order to make it so the player moves forwards and backwards in relation to where
+	#the camera is pointing
 	dir += -cam_xform.basis.z.normalized() * input_movement_vector.y
 	dir += cam_xform.basis.x.normalized() * input_movement_vector.x
 	# ----------------------------------
 
 	# ----------------------------------
 	# Jumping
+	#If the player is on the floor and we have pressed the space bar we set the y velocity to the jump speed
 	if is_on_floor():
 		if Input.is_action_just_pressed("movement_jump"):
 			vel.y = JUMP_SPEED
@@ -159,6 +169,7 @@ func process_input(delta):
 	
 	# ----------------------------------
 	# Sprinting
+	#If the Shift key is being pressed then we make the boolean is_sprint = true, if it is not than the boolean is set to false
 	if Input.is_action_pressed("movement_sprint"):
 		is_sprinting = true
 	else:
@@ -167,6 +178,7 @@ func process_input(delta):
 	
 	# ----------------------------------
 	# Turning the flashlight on/off
+	#If F is pressed on the keyboard and the flashlight is being used, hide the flashlight, if it is not than show it
 	if Input.is_action_just_pressed("flashlight"):
 		if flashlight.is_visible_in_tree():
 			flashlight.hide()
@@ -176,7 +188,7 @@ func process_input(delta):
 
 	# ----------------------------------
 	# Capturing/Freeing the cursor
-# Capturing/Freeing cursor
+	#if the mouse mode is visible change it so that it is hidden and locked in position
 	if Input.get_mouse_mode() == Input.MOUSE_MODE_VISIBLE:
 		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	# ----------------------------------
@@ -211,29 +223,29 @@ func process_input(delta):
 	
 	# ----------------------------------
 	# Firing the weapons
-	if Input.is_action_pressed("fire"):
-		if changing_weapon == false:
-			if reloading_weapon == false:
-				var current_weapon = weapons[current_weapon_name]
-				if current_weapon != null:
-					if current_weapon.ammo_in_weapon > 0:
-						if animation_manager.current_state == current_weapon.IDLE_ANIM_NAME:
-							animation_manager.set_animation(current_weapon.FIRE_ANIM_NAME)
-					else:
-						reloading_weapon = true
+	if Input.is_action_pressed("fire"): #if mouse button 1s pressed
+		if changing_weapon == false: #and you are not currently changing a weapon
+			if reloading_weapon == false: #and you are not currently reloading a weapon
+				var current_weapon = weapons[current_weapon_name] #make the current_weapon variable the current weapons name
+				if current_weapon != null: # #if the current weapon variable DOES equal something 
+					if current_weapon.ammo_in_weapon > 0: #and the ammo in the current weapon is more than 0
+						if animation_manager.current_state == current_weapon.IDLE_ANIM_NAME: #if the animation playiong at the moment is the idle animation
+							animation_manager.set_animation(current_weapon.FIRE_ANIM_NAME) #set the current weapons animation to the firing animation
+					else: #if this is not happening
+						reloading_weapon = true #you are reloading the weapon
 	# ----------------------------------
 	
 	# ----------------------------------
 	# Reloading
-	if reloading_weapon == false:
-		if changing_weapon == false:
-			if Input.is_action_just_pressed("reload"):
-				var current_weapon = weapons[current_weapon_name]
-				if current_weapon != null:
-					if current_weapon.CAN_RELOAD == true:
-						var current_anim_state = animation_manager.current_state
-						var is_reloading = false
-						for weapon in weapons:
+	if reloading_weapon == false: #if you are not reloading the weapon
+		if changing_weapon == false: #if you are not changing the weapon
+			if Input.is_action_just_pressed("reload"): #if you press R on the keyboard
+				var current_weapon = weapons[current_weapon_name] #make the current_weapon variable the current weapons name
+				if current_weapon != null: #if the current weapon does equal something
+					if current_weapon.CAN_RELOAD == true: #if current weapon can reload
+						var current_anim_state = animation_manager.current_state #Set the variable current_anim_state to the current animation
+						var is_reloading = false #set the reloading to false
+						for weapon in weapons: #for is used to repeat a block of code
 							var weapon_node = weapons[weapon]
 							if weapon_node != null:
 								if current_anim_state == weapon_node.RELOADING_ANIM_NAME:
@@ -270,20 +282,22 @@ func process_view_input(delta):
 	
 	# ----------------------------------
 	# Changing and throwing grenades
-
+	#if your press V on the keyboard and the current grenade is grenade change it to sticky grenade, if it is sticky grenade change it to grenade
 	if Input.is_action_just_pressed("change_grenade"):
 		if current_grenade == "Grenade":
 			current_grenade = "Sticky Grenade"
 		elif current_grenade == "Sticky Grenade":
 			current_grenade = "Grenade"
-	
+		
+	#if the G is pressed on the keyboard and the current grenade has more than one ammo, take one ammo away
 	if Input.is_action_just_pressed("fire_grenade"):
 		if grenade_amounts[current_grenade] > 0:
 			grenade_amounts[current_grenade] -= 1
 			
+			#add a variable called grenade clone
 			var grenade_clone
-			if current_grenade == "Grenade":
-				grenade_clone = grenade_scene.instance()
+			if current_grenade == "Grenade": #if the current grenade is equal to grenade
+				grenade_clone = grenade_scene.instance() #creating an instance of something is basically instantiating an object into the scene, in this case we are instantiating a grenade into the scene, or in other words creating a grenade
 			elif current_grenade == "Sticky Grenade":
 				grenade_clone = sticky_grenade_scene.instance()
 				grenade_clone.player_body = self
@@ -295,7 +309,9 @@ func process_view_input(delta):
 
 # ----------------------------------
 # Grabbing and throwing objects
-
+	#This part of the code uses something called a raycast without actually having a raycast, a raycast is a type
+	#of technique used, in which aray of sorts is projected fromwhere the camera is looking and moves in front of the player
+	#rays can be infinite however this one has a distance so if anyuthing touches the ray within that distance it can then be picked up
 	if Input.is_action_just_pressed("Grab") and current_weapon_name == "UNARMED":
 		if grabbed_object == null:
 			var state = get_world().direct_space_state
@@ -328,39 +344,44 @@ func process_view_input(delta):
 # ----------------------------------
 
 func process_movement(delta):
-	dir.y = 0
-	dir = dir.normalized()
+	dir.y = 0 #set the y value on dir to 0
+	dir = dir.normalized() #we use normalize so that the player moves at a constant speed even when moving diagonally
 
-	vel.y += delta*GRAVITY
+	vel.y += delta*GRAVITY #we add the gravity variable to the players Y velocity simulating gravity
 
-	var hvel = vel
-	hvel.y = 0
+	var hvel = vel # assign velocity to a new variable called hvel
+	hvel.y = 0 #set hvels y velococity to 0
 
-	var target = dir
-	if is_sprinting:
-		target *= MAX_SPRINT_SPEED
-	else:
+	var target = dir #assign velocity to a new variable called target
+	if is_sprinting: #if you are sprint
+		target *= MAX_SPRINT_SPEED #times your target speed by your max sprint speed
+	else: #if you are not sprint then simply times you target speed by your max speed
 		target *= MAX_SPEED
 
-	var accel
-	if dir.dot(hvel) > 0:
-		if is_sprinting:
+	var accel #make a new variable called accel
+	
+	if dir.dot(hvel) > 0: #if our player is moving using hvel
+		if is_sprinting: # and we are spring then we set accel to SPRINT ACCEL to accelerate at a sprinting pace
 			accel = SPRINT_ACCEL
-		else:
+		else: #if we are not sprinting that accel is equal to normal acceleration
 			accel = ACCEL
-	else:
+	else: #if we are not doing any of that, then we are not moving and we need to slow down, so make accel equal to deaccel to deaccelerate
 		accel = DEACCEL
-
-	hvel = hvel.linear_interpolate(target, accel*delta)
-	vel.x = hvel.x
+	
+	#Liner interpolation takes two known values and estimates a new unknown value, in this case we are estimating hvel using target and accel times delta value
+	#to get the new hvel value
+	hvel = hvel.linear_interpolate(target, accel*delta) 
+	vel.x = hvel.x #we then change the vel variable to the new hvel values
 	vel.z = hvel.z
-	vel = move_and_slide(vel,Vector3(0,1,0), 0.05, 4, deg2rad(MAX_SLOPE_ANGLE))
+	vel = move_and_slide(vel,Vector3(0,1,0), 0.05, 4, deg2rad(MAX_SLOPE_ANGLE)) #we then have to make it so that the kinematic body can handle moving the player through the world using the physics
 
 
 func process_changing_weapons(delta):
-	if changing_weapon == true:
+	#If the boolean for changing weapons is equal to true then weapon unequipped is equal to false
+	#If the current weapon is equal to nothing, weapon unequipped is equal to true
+	if changing_weapon == true: 
 
-		var weapon_unequipped = false
+		var weapon_unequipped = false 
 		var current_weapon = weapons[current_weapon_name]
 
 		if current_weapon == null:
@@ -392,15 +413,15 @@ func process_changing_weapons(delta):
 
 func _input(event):
 	
-	if is_dead:
+	if is_dead: #if you are dead then return to the function where this piece of code was called on
 		return
 	
-	if event is InputEventMouseMotion and Input.get_mouse_mode() == Input.MOUSE_MODE_CAPTURED:
-		rotation_helper.rotate_x(deg2rad(event.relative.y * MOUSE_SENSITIVITY))
-		self.rotate_y(deg2rad(event.relative.x * MOUSE_SENSITIVITY * -1))
+	if event is InputEventMouseMotion and Input.get_mouse_mode() == Input.MOUSE_MODE_CAPTURED: #if an event is an inputEventMouseMotion (in other words whenever the mouse cursor moves)
+		rotation_helper.rotate_x(deg2rad(event.relative.y * MOUSE_SENSITIVITY)) #rotate the rotation_helper node on the x axis by the y value provided by InputEventMouseMotion
+		self.rotate_y(deg2rad(event.relative.x * MOUSE_SENSITIVITY * -1)) #rotate the entire kinematic body on the y axis by the x value you got from the InputEventMouseMotion
 
 		var camera_rot = rotation_helper.rotation_degrees
-		camera_rot.x = clamp(camera_rot.x, -70, 70)
+		camera_rot.x = clamp(camera_rot.x, -70, 70) #A clamp is used to cap the angle at which a camera can rotate so that you can't rotate 360 degrees on the y axis
 		rotation_helper.rotation_degrees = camera_rot
 
 	if event is InputEventMouseButton and Input.get_mouse_mode() == Input.MOUSE_MODE_CAPTURED:
@@ -427,7 +448,10 @@ func fire_bullet():
 	weapons[current_weapon_name].fire_weapon()
 
 func process_UI(delta):
-	if current_weapon_name == "UNARMED" or current_weapon_name == "KNIFE":
+	#Check to see if the current weapon name is equal to unarmed or knife
+	#if it does then it only shows the health of your character and the ammo fo your grenades
+	#if you are currently holding an actual weapon then the text will show your health along with your weapon ammo, spare ammo and grenade ammo
+	if current_weapon_name == "UNARMED" or current_weapon_name == "KNIFE": 
 		UI_status_label.text = "HEALTH: " + str(health) + \
 				"\n" + current_grenade + ": " + str(grenade_amounts[current_grenade])
 	else:
@@ -458,7 +482,9 @@ func add_grenade(additional_grenade):
 
 func process_respawn(delta):
 
-	# If we've just died
+	#If our health is less than or equal to 0 and we are not already dead 
+	#We make it so that we are changing weapons and we are unarmed
+	#We then add the death screen panel and disable our HUD, we set is dead to true, throw any objects we have in our hands using an impulse and start the respawn timer
 	if health <= 0 and !is_dead:
 		$Body_CollisionShape.disabled = true
 		$Feet_CollisionShape.disabled = true
@@ -476,7 +502,7 @@ func process_respawn(delta):
 	
 		if grabbed_object != null:
 			grabbed_object.mode = RigidBody.MODE_RIGID
-			grabbed_object.apply_impulse(Vector3(0, 0, 0), -camera.global_transform.basis.z.normalized() * OBJECT_THROW_FORCE / 2)
+			grabbed_object.apply_impulse(Vector3(0, 0, 0), -camera.global_transform.basis.z.normalized() * OBJECT_THROW_FORCE / 2) #applying an impluse is a type of force that can be applied to an object in order to simulate a sudden force
 	
 			grabbed_object.collision_layer = 1
 			grabbed_object.collision_mask = 1

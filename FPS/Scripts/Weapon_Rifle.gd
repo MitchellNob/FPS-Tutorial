@@ -2,7 +2,7 @@ extends Spatial
 
 const DAMAGE = 4
 
-const IDLE_ANIM_NAME = "Rifle_idle"
+const IDLE_ANIM_NAME = "Rifle_idle" 
 const FIRE_ANIM_NAME = "Rifle_fire"
 const CAN_RELOAD = true
 const CAN_REFILL = true
