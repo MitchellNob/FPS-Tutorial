@@ -5,7 +5,6 @@
 [ext_resource path="res://assets/Gamemode_Objects/Metal_Red.material" type="Material" id=3]
 [ext_resource path="res://Scripts/Health_Pickup.gd" type="Script" id=4]
 
-
 [sub_resource type="ArrayMesh" id=1]
 resource_name = "Cube.055"
 surfaces/0 = {
