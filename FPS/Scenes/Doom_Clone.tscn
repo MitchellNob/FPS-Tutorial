@@ -1,3 +1,17 @@
-[gd_scene format=2]
+[gd_scene load_steps=2 format=2]
+
+[sub_resource type="CubeMesh" id=1]
 
 [node name="Doom_Clone" type="Spatial"]
+
+[node name="Environment" type="Spatial" parent="."]
+
+[node name="Ground" type="MeshInstance" parent="Environment"]
+transform = Transform( 6, 0, 0, 0, 0.1, 0, 0, 0, 6, 0, 0, 0 )
+mesh = SubResource( 1 )
+material/0 = null
+
+[node name="Wall" type="MeshInstance" parent="Environment"]
+transform = Transform( 1, 0, 0, 0, 0.1, 0, 0, 0, 1, -2.63142, 1.65078, 0 )
+mesh = SubResource( 1 )
+material/0 = null
