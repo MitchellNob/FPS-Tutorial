@@ -1,0 +1,83 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://Scripts/Lose_Script.gd" type="Script" id=1]
+
+[sub_resource type="Shader" id=1]
+
+[sub_resource type="ShaderMaterial" id=2]
+shader = SubResource( 1 )
+
+[node name="Control" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -1.0
+margin_top = -1.0
+margin_right = -1.0
+margin_bottom = -1.0
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+menu_scene = "res://Scenes/Main_Menu.tscn"
+doom_scene = "res://Scenes/Doom_Clone.tscn"
+
+[node name="Death_screen" type="Panel" parent="."]
+margin_left = 377.0
+margin_top = 194.0
+margin_right = 909.0
+margin_bottom = 509.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="Death_screen"]
+margin_left = 122.0
+margin_top = 58.0
+margin_right = 380.0
+margin_bottom = 134.0
+rect_scale = Vector2( 1.5, 1.5 )
+rect_pivot_offset = Vector2( 114, 31.3333 )
+text = "YOU DIED SLAYER"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Button_Start_Over" type="Button" parent="Death_screen"]
+margin_left = 16.0
+margin_top = 268.0
+margin_right = 122.0
+margin_bottom = 308.0
+rect_scale = Vector2( 0.75, 0.75 )
+text = "Start Over"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Button_Main_Menu" type="Button" parent="Death_screen"]
+margin_left = 108.0
+margin_top = 268.0
+margin_right = 198.0
+margin_bottom = 308.0
+rect_scale = Vector2( 0.75, 0.75 )
+text = "Main Menu"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Panel" type="Panel" parent="Death_screen"]
+material = SubResource( 2 )
+margin_left = 285.0
+margin_top = 175.0
+margin_right = 502.0
+margin_bottom = 295.0
+
+[node name="Label" type="Label" parent="Death_screen/Panel"]
+margin_left = 27.0
+margin_top = 7.0
+margin_right = 190.0
+margin_bottom = 103.0
+text = "stats"
+align = 1
+valign = 1
