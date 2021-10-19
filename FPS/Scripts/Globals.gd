@@ -16,8 +16,8 @@ var popup = null
 var respawn_points = null
 
 var audio_clips = {
-	"pistol_shot": preload("res://Audio/Handgun.mp3"),
-	"rifle_shot": preload("res://Audio/AR.mp3"),
+	#"pistol_shot": preload("res://Audio/Handgun.mp3"),
+	#"rifle_shot": preload("res://Audio/AR.mp3"),
 }
 
 const SIMPLE_AUDIO_PLAYER_SCENE = preload("res://Scenes/Simple_Audio_Player.tscn")
