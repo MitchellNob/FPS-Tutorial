@@ -73,6 +73,7 @@ shape = SubResource( 3 )
 
 [node name="Explosion" type="Particles" parent="."]
 transform = Transform( 3, 0, 0, 0, 3, 0, 0, 0, 3, 0, -0.0767642, 0 )
+visible = false
 emitting = false
 amount = 128
 lifetime = 1.45

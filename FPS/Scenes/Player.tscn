@@ -14,7 +14,6 @@
 [ext_resource path="res://assets/32-32_white.png" type="Texture" id=12]
 [ext_resource path="res://assets/Titillium-Regular.otf" type="DynamicFontData" id=13]
 
-
 [sub_resource type="CapsuleShape" id=1]
 radius = 1.2
 height = 9.0
