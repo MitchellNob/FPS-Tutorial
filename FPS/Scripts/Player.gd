@@ -67,6 +67,9 @@ const RESPAWN_TIME = 4
 var dead_time = 0
 var is_dead = false
 
+#Radial Menu
+var Gun_selection = false
+
 func _ready():
 	globals = get_node("/root/Globals")
 	global_transform.origin = globals.get_respawn_position()
@@ -100,6 +103,13 @@ func _ready():
 	
 	#assigns the flashlight node to the variable
 	flashlight = $Rotation_Helper/Flashlight
+	
+	#
+	$HUD/Radial_Menu/Button.connect("pressed", self, "Gun_Selection", ["Primary"])
+	$HUD/Radial_Menu/Button2.connect("pressed", self, "Gun_Selection", ["Secondary"])
+	$HUD/Radial_Menu/Button3.connect("pressed", self, "Gun_Selection", ["Knife"])
+	$HUD/Radial_Menu/Button4.connect("pressed", self, "Gun_Selection", ["Grenade"])
+	$HUD/Radial_Menu/Button5.connect("pressed", self, "Gun_Selection", ["SGrenade"])
 
 func _physics_process(delta):
 	
@@ -108,8 +118,9 @@ func _physics_process(delta):
 		process_input(delta)
 		process_view_input(delta)
 		process_movement(delta)
+
 	
-	#If you are not holding an object you are allowed to change weapons and reload
+	#If you are holding any objects then these three functions are not to be used, in this instance that would be the changing weapons, reloading and selecting a gun.
 	if grabbed_object == null:
 		process_changing_weapons(delta)
 		process_reloading(delta)
@@ -166,7 +177,7 @@ func process_input(delta):
 		if Input.is_action_just_pressed("movement_jump"):
 			vel.y = JUMP_SPEED
 	# ----------------------------------
-	
+
 	# ----------------------------------
 	# Sprinting
 	#If the Shift key is being pressed then we make the boolean is_sprint = true, if it is not than the boolean is set to false
@@ -175,7 +186,7 @@ func process_input(delta):
 	else:
 		is_sprinting = false
 	# ----------------------------------
-	
+
 	# ----------------------------------
 	# Turning the flashlight on/off
 	#If F is pressed on the keyboard and the flashlight is being used, hide the flashlight, if it is not than show it
@@ -192,49 +203,22 @@ func process_input(delta):
 	if Input.get_mouse_mode() == Input.MOUSE_MODE_VISIBLE:
 		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	# ----------------------------------
-	
-	# ----------------------------------
-	# Changing weapons.
-	var weapon_change_number = WEAPON_NAME_TO_NUMBER[current_weapon_name]
-	
-	if Input.is_key_pressed(KEY_1):
-		weapon_change_number = 0
-	if Input.is_key_pressed(KEY_2):
-		weapon_change_number = 1
-	if Input.is_key_pressed(KEY_3):
-		weapon_change_number = 2
-	if Input.is_key_pressed(KEY_4):
-		weapon_change_number = 3
-	
-	if Input.is_action_just_pressed("shift_weapon_positive"):
-		weapon_change_number += 1
-	if Input.is_action_just_pressed("shift_weapon_negative"):
-		weapon_change_number -= 1
-	
-	weapon_change_number = clamp(weapon_change_number, 0, WEAPON_NUMBER_TO_NAME.size()-1)
-	
-	if changing_weapon == false:
-		if reloading_weapon == false:
-			if WEAPON_NUMBER_TO_NAME[weapon_change_number] != current_weapon_name:
-				changing_weapon_name = WEAPON_NUMBER_TO_NAME[weapon_change_number]
-				changing_weapon = true
-				mouse_scroll_value = weapon_change_number
-	# ----------------------------------
-	
+
 	# ----------------------------------
 	# Firing the weapons
 	if Input.is_action_pressed("fire"): #if mouse button 1s pressed
 		if changing_weapon == false: #and you are not currently changing a weapon
 			if reloading_weapon == false: #and you are not currently reloading a weapon
-				var current_weapon = weapons[current_weapon_name] #make the current_weapon variable the current weapons name
-				if current_weapon != null: # #if the current weapon variable DOES equal something 
-					if current_weapon.ammo_in_weapon > 0: #and the ammo in the current weapon is more than 0
-						if animation_manager.current_state == current_weapon.IDLE_ANIM_NAME: #if the animation playiong at the moment is the idle animation
-							animation_manager.set_animation(current_weapon.FIRE_ANIM_NAME) #set the current weapons animation to the firing animation
-					else: #if this is not happening
-						reloading_weapon = true #you are reloading the weapon
+				if Gun_selection == false:
+					var current_weapon = weapons[current_weapon_name] #make the current_weapon variable the current weapons name
+					if current_weapon != null: # #if the current weapon variable DOES equal something 
+						if current_weapon.ammo_in_weapon > 0: #and the ammo in the current weapon is more than 0
+							if animation_manager.current_state == current_weapon.IDLE_ANIM_NAME: #if the animation playiong at the moment is the idle animation
+								animation_manager.set_animation(current_weapon.FIRE_ANIM_NAME) #set the current weapons animation to the firing animation
+						else: #if this is not happening
+							reloading_weapon = true #you are reloading the weapon
 	# ----------------------------------
-	
+
 	# ----------------------------------
 	# Reloading
 	if reloading_weapon == false: #if you are not reloading the weapon
@@ -253,6 +237,20 @@ func process_input(delta):
 						if is_reloading == false:
 							reloading_weapon = true
 	# ----------------------------------
+
+	# ----------------------------------
+	# Gun Selection Menu
+	#If the TAB key is pressed then the Gun selection menu becomes visible and
+	if Input.is_action_pressed("ui_focus_next"):
+		$HUD/Radial_Menu.visible = true
+		Input.set_mouse_mode(Input.MOUSE_MODE_CONFINED)
+		Gun_selection = true
+	else:
+		$HUD/Radial_Menu.visible = false
+		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+		Gun_selection = false
+	# ----------------------------------
+	
 	
 func process_view_input(delta):
 	if Input.get_mouse_mode() != Input.MOUSE_MODE_CAPTURED:
@@ -279,7 +277,7 @@ func process_view_input(delta):
 		camera_rot.x = clamp(camera_rot.x, -70, 70)
 		rotation_helper.rotation_degrees = camera_rot
 	# ----------------------------------
-	
+
 	# ----------------------------------
 	# Changing and throwing grenades
 	#if your press V on the keyboard and the current grenade is grenade change it to sticky grenade, if it is sticky grenade change it to grenade
@@ -310,7 +308,7 @@ func process_view_input(delta):
 # ----------------------------------
 # Grabbing and throwing objects
 	#This part of the code uses something called a raycast without actually having a raycast, a raycast is a type
-	#of technique used, in which aray of sorts is projected fromwhere the camera is looking and moves in front of the player
+	#of technique used, in which a ray of sorts is projected from where the camera is looking and moves in front of the player
 	#rays can be infinite however this one has a distance so if anyuthing touches the ray within that distance it can then be picked up
 	if Input.is_action_just_pressed("Grab") and current_weapon_name == "UNARMED":
 		if grabbed_object == null:
@@ -342,6 +340,7 @@ func process_view_input(delta):
 	if grabbed_object != null:
 		grabbed_object.global_transform.origin = camera.global_transform.origin + (-camera.global_transform.basis.z.normalized() * OBJECT_GRAB_DISTANCE)
 # ----------------------------------
+
 
 func process_movement(delta):
 	dir.y = 0 #set the y value on dir to 0
@@ -539,3 +538,28 @@ func process_respawn(delta):
 
 func create_sound(sound_name, position=null):
 	globals.play_sound(sound_name, false, position)
+
+func Gun_Selection(button_name):
+	
+	var weapon_change_number = WEAPON_NAME_TO_NUMBER[current_weapon_name]
+	
+	if button_name == "Grenade":
+		current_grenade = "Grenade"
+		print("Grenade")
+	elif button_name == "SGrenade":
+		current_grenade = "Sticky Grenade"
+		print("SGrenade")
+	elif button_name == "Primary":
+		weapon_change_number = 3
+		print("AR")
+	elif button_name == "Secondary":
+		weapon_change_number = 2
+	elif button_name == "Knife":
+		weapon_change_number = 1
+	
+	if changing_weapon == false:
+		if reloading_weapon == false:
+			if WEAPON_NUMBER_TO_NAME[weapon_change_number] != current_weapon_name:
+				changing_weapon_name = WEAPON_NUMBER_TO_NAME[weapon_change_number]
+				changing_weapon = true
+				mouse_scroll_value = weapon_change_number

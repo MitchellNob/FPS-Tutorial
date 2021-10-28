@@ -4169,6 +4169,10 @@ transform = Transform( 1, 0, 0, 0, 0.983001, 0.1836, 0, -0.1836, 0.983001, 0, -0
 [node name="HUD" type="Control" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
+margin_left = -1.0
+margin_top = -7.0
+margin_right = -1.0
+margin_bottom = -7.0
 
 [node name="Crosshair" type="Control" parent="HUD"]
 modulate = Color( 1, 1, 1, 0.705882 )
@@ -4245,6 +4249,9 @@ margin_top = -10.0
 margin_right = 380.0
 margin_bottom = 160.0
 custom_styles/panel = SubResource( 24 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="Gun_label" type="Label" parent="HUD/Panel"]
 self_modulate = Color( 1, 1, 1, 0.705882 )
@@ -4272,3 +4279,103 @@ text = "You died
 0.00 seconds till respawn"
 align = 1
 valign = 1
+
+[node name="Radial_Menu" type="Panel" parent="HUD"]
+margin_left = 287.0
+margin_top = 290.0
+margin_right = 991.0
+margin_bottom = 428.0
+
+[node name="Button" type="Button" parent="HUD/Radial_Menu"]
+margin_left = 6.0
+margin_top = 5.0
+margin_right = 136.0
+margin_bottom = 133.0
+rect_pivot_offset = Vector2( 249, 66.5 )
+
+[node name="Label" type="Label" parent="HUD/Radial_Menu/Button"]
+margin_left = -2.2063
+margin_top = 25.7937
+margin_right = 132.794
+margin_bottom = 103.794
+text = "Automatic
+Rifle"
+align = 1
+valign = 1
+
+[node name="Button2" type="Button" parent="HUD/Radial_Menu"]
+margin_left = 141.0
+margin_top = 5.0
+margin_right = 271.0
+margin_bottom = 133.0
+rect_pivot_offset = Vector2( 249, 66.5 )
+
+[node name="Label2" type="Label" parent="HUD/Radial_Menu/Button2"]
+margin_left = -2.2771
+margin_top = 28.1748
+margin_right = 132.723
+margin_bottom = 106.175
+text = "Pistol"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Button3" type="Button" parent="HUD/Radial_Menu"]
+margin_left = 276.0
+margin_top = 5.0
+margin_right = 406.0
+margin_bottom = 133.0
+rect_pivot_offset = Vector2( 249, 66.5 )
+
+[node name="Label3" type="Label" parent="HUD/Radial_Menu/Button3"]
+margin_left = -1.5542
+margin_top = 27.3811
+margin_right = 133.446
+margin_bottom = 105.381
+text = "Knife"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Button4" type="Button" parent="HUD/Radial_Menu"]
+margin_left = 433.0
+margin_top = 5.0
+margin_right = 563.0
+margin_bottom = 133.0
+rect_pivot_offset = Vector2( 249, 66.5 )
+
+[node name="Label4" type="Label" parent="HUD/Radial_Menu/Button4"]
+margin_left = -2.19507
+margin_top = 27.3811
+margin_right = 132.805
+margin_bottom = 105.381
+text = "Grenade"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Button5" type="Button" parent="HUD/Radial_Menu"]
+margin_left = 568.0
+margin_top = 5.0
+margin_right = 698.0
+margin_bottom = 133.0
+rect_pivot_offset = Vector2( 249, 66.5 )
+
+[node name="Label5" type="Label" parent="HUD/Radial_Menu/Button5"]
+margin_left = -2.26587
+margin_top = 26.5874
+margin_right = 132.734
+margin_bottom = 104.587
+text = "Sticky
+Grenade"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}

@@ -25,15 +25,6 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Panel" type="Panel" parent="Player/Control"]
-margin_left = 357.034
-margin_top = 168.842
-margin_right = 931.034
-margin_bottom = 535.842
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
 [node name="Environment" type="Spatial" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 2.74052, 0, 0 )
 
@@ -44,9 +35,6 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 68.8476, 0 )
 
 [node name="HTerrain2" type="Spatial" parent="Environment/Ground"]
 script = ExtResource( 2 )
-ambient_wind = 0.0
-lod_scale = 2.0
-map_scale = Vector3( 1, 1, 1 )
 _terrain_data = ExtResource( 4 )
 chunk_size = 32
 collision_enabled = true
