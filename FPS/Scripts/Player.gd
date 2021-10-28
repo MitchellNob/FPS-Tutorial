@@ -209,7 +209,7 @@ func process_input(delta):
 	if Input.is_action_pressed("fire"): #if mouse button 1s pressed
 		if changing_weapon == false: #and you are not currently changing a weapon
 			if reloading_weapon == false: #and you are not currently reloading a weapon
-				if Gun_selection == false:
+				if Gun_selection == false: #and you are not in the gun selection menu
 					var current_weapon = weapons[current_weapon_name] #make the current_weapon variable the current weapons name
 					if current_weapon != null: # #if the current weapon variable DOES equal something 
 						if current_weapon.ammo_in_weapon > 0: #and the ammo in the current weapon is more than 0
