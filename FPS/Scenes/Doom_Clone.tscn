@@ -16,7 +16,7 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -213.481, 0, 0 )
 script = ExtResource( 5 )
 
 [node name="Player" parent="." instance=ExtResource( 1 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 212.566, 0.794485, 0 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 221.939, 12.0989, 39.6226 )
 
 [node name="Control" type="Control" parent="Player"]
 margin_right = 40.0
@@ -33,7 +33,7 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 68.8476, 0 )
 
 [node name="Ground" type="Spatial" parent="Environment"]
 
-[node name="HTerrain2" type="Spatial" parent="Environment/Ground"]
+[node name="HTerrain" type="Spatial" parent="Environment/Ground"]
 script = ExtResource( 2 )
 _terrain_data = ExtResource( 4 )
 chunk_size = 32
