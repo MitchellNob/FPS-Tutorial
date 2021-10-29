@@ -16,7 +16,6 @@
 [ext_resource path="res://assets/Ruin_Level_Objects/Respawn_Point_Setter.gd" type="Script" id=14]
 [ext_resource path="res://Scenes/Turret.tscn" type="PackedScene" id=15]
 
-
 [sub_resource type="PanoramaSky" id=1]
 radiance_size = 3
 panorama = ExtResource( 1 )
