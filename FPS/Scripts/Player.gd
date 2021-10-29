@@ -11,6 +11,7 @@ const SPRINT_ACCEL = 15 # Constant Variable that tells us how fast we accelerate
 var is_sprinting = false #Boolean that tells us if we are sprinting or not
 const DEACCEL= 16 #Constant Variable that tells us how quickly we going to deaccelerate
 const MAX_SLOPE_ANGLE = 40 #Constant Variable that tells us how the steepest angle we can walk on
+var double_jump = 2
 
 #Camera
 var dir = Vector3() # 
@@ -174,8 +175,14 @@ func process_input(delta):
 	# Jumping
 	#If the player is on the floor and we have pressed the space bar we set the y velocity to the jump speed
 	if is_on_floor():
+		double_jump = 2
 		if Input.is_action_just_pressed("movement_jump"):
 			vel.y = JUMP_SPEED
+			double_jump -= 1
+	elif double_jump == 1:
+		if Input.is_action_just_pressed("movement_jump"):
+			vel.y = JUMP_SPEED
+			double_jump -= 1
 	# ----------------------------------
 
 	# ----------------------------------
