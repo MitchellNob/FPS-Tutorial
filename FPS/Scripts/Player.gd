@@ -32,7 +32,7 @@ var changing_weapon_name = "UNARMED"
 
 #Health
 const MAX_HEALTH = 150 # Constant Variable for your maximum health
-var health = 100 #Variable for how much health you have set 100 to default
+
 
 #Miscellaenous
 var UI_status_label #
@@ -173,12 +173,18 @@ func process_input(delta):
 
 	# ----------------------------------
 	# Jumping
-	#If the player is on the floor and we have pressed the space bar we set the y velocity to the jump speed
+	#This script checks another block of code to make sure that the player is one the floor, once they are then it resets the variable
+	#double jump to 2, then if the player presses the space bar we make it so that the y velocity of the player is equal to the variable
+	#JUMP_SPEED, which makes us jump, we then minus 1 away from the double_jump variable making double_jump equal to 1.
 	if is_on_floor():
 		double_jump = 2
 		if Input.is_action_just_pressed("movement_jump"):
 			vel.y = JUMP_SPEED
 			double_jump -= 1
+	
+	#This block of code checks to see if the variable double_jump is equal to 1, if it is and we press the space bar then we set the
+	#players y velocity to the JUMP_SPEED making them jump and minusing 1 again from double_jump leaving us with 0, meaning we can
+	
 	elif double_jump == 1:
 		if Input.is_action_just_pressed("movement_jump"):
 			vel.y = JUMP_SPEED
@@ -458,11 +464,11 @@ func process_UI(delta):
 	#if it does then it only shows the health of your character and the ammo fo your grenades
 	#if you are currently holding an actual weapon then the text will show your health along with your weapon ammo, spare ammo and grenade ammo
 	if current_weapon_name == "UNARMED" or current_weapon_name == "KNIFE": 
-		UI_status_label.text = "HEALTH: " + str(health) + \
+		UI_status_label.text = "HEALTH: " + str(get_node("/root/Globals").health) + \
 				"\n" + current_grenade + ": " + str(grenade_amounts[current_grenade])
 	else:
 		var current_weapon = weapons[current_weapon_name]
-		UI_status_label.text = "HEALTH: " + str(health) + \
+		UI_status_label.text = "HEALTH: " + str(get_node("/root/Globals").health) + \
 				"\nAMMO: " + str(current_weapon.ammo_in_weapon) + "/" + str(current_weapon.spare_ammo) + \
 				"\n" + current_grenade + ": " + str(grenade_amounts[current_grenade])
 
@@ -474,8 +480,8 @@ func process_reloading(delta):
 		reloading_weapon = false
 
 func add_health(additional_health):
-	health += additional_health
-	health = clamp(health, 0, MAX_HEALTH)
+	get_node("/root/Globals").health += additional_health
+	get_node("/root/Globals").health = clamp(get_node("/root/Globals").health, 0, MAX_HEALTH)
 
 func add_ammo(additional_ammo):
 	if (current_weapon_name != "UNARMED"):
@@ -491,7 +497,7 @@ func process_respawn(delta):
 	#If our health is less than or equal to 0 and we are not already dead 
 	#We make it so that we are changing weapons and we are unarmed
 	#We then add the death screen panel and disable our HUD, we set is dead to true, throw any objects we have in our hands using an impulse and start the respawn timer
-	if health <= 0 and !is_dead:
+	if get_node("/root/Globals").health <= 0 and !is_dead:
 		$Body_CollisionShape.disabled = true
 		$Feet_CollisionShape.disabled = true
 	
@@ -537,7 +543,7 @@ func process_respawn(delta):
 				if weapon_node != null:
 					weapon_node.reset_weapon()
 	
-			health = 100
+			get_node("/root/Globals").health = 100
 			grenade_amounts = {"Grenade":2, "Sticky Grenade":2}
 			current_grenade = "Grenade"
 	
@@ -547,15 +553,28 @@ func create_sound(sound_name, position=null):
 	globals.play_sound(sound_name, false, position)
 
 func Gun_Selection(button_name):
+	#A vartable to contain the Weapon name into a numerical figure so that when we call it in our script, now when we call 1, 2 or 3 it 
+	#will correspond to a different weapon
+	var weapon_change_number = WEAPON_NAME_TO_NUMBER[current_weapon_name] 
 	
-	var weapon_change_number = WEAPON_NAME_TO_NUMBER[current_weapon_name]
-	
-	if button_name == "Grenade":
+	#if the button named Grenade is pressed on the panel then we change the variable current_grenade which
+	#we store our data for the grenade we are using in, to the Grenade, I also used the print function so that when I was debugging
+	#i could physically see if the button was being pressed properly
+	if button_name == "Grenade": 
 		current_grenade = "Grenade"
 		print("Grenade")
+		
+	#the same is done but opposite for the Sticky Grenade, if the SGrenade button is clicked then we 
+	#change the current_grenade variable to Sticky Grenade.
+	#I also use the else if function here because this means that the code can check multiple if functions at the same time, 
+	#it means that once one of the if functions come back to be true it reads the block of code underneath it.
 	elif button_name == "SGrenade":
 		current_grenade = "Sticky Grenade"
 		print("SGrenade")
+	
+	#Things are slightly different for the remaining three elif statements, it still checks to see if the corresponding buttons have
+	#been hit however, once it has done that instead of changing the grenade variable, it changes the weapon_change_number variable that
+	#we made earlier, this means that when we click the Primary button we are changing the variable to 3 which corresponds to the AR.
 	elif button_name == "Primary":
 		weapon_change_number = 3
 		print("AR")

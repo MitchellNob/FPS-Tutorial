@@ -12,6 +12,7 @@ var debug_display = null
 const MAIN_MENU_PATH = "res://Scenes/Main_Menu.tscn"
 const POPUP_SCENE = preload("res://Scenes/Pause_Popup.tscn")
 var popup = null
+var health = 100
 
 var respawn_points = null
 
