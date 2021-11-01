@@ -548,6 +548,9 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 214.286, 21.9252, 330.479 )
 
 [node name="HTerrain" type="Spatial" parent="Environment"]
 script = ExtResource( 2 )
+ambient_wind = 0.0
+lod_scale = 2.0
+map_scale = Vector3( 1, 1, 1 )
 _terrain_data = ExtResource( 4 )
 chunk_size = 32
 collision_enabled = true
@@ -568,7 +571,6 @@ shader_params/u_tile_reduction = Plane( 0, 0, 0, 0 )
 
 [node name="Grunt" parent="Enemies" instance=ExtResource( 11 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 198.693, 3.54743, 250.255 )
-
 [connection signal="pressed" from="Player/Tutorial/Panel2/first_button" to="." method="_on_first_button_pressed"]
 [connection signal="pressed" from="Player/Tutorial/Panel3/second_button" to="." method="_on_second_button_pressed"]
 [connection signal="pressed" from="Player/Tutorial/Panel4/third_button" to="." method="_on_third_button_pressed"]
