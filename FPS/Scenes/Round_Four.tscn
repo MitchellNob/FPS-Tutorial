@@ -464,8 +464,10 @@ shader_params/u_depth_blending = true
 shader_params/u_triplanar = false
 shader_params/u_tile_reduction = Plane( 0, 0, 0, 0 )
 
-[node name="Grunt" parent="." instance=ExtResource( 11 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 184.199, 3.54743, 192.639 )
+[node name="Enemies" type="Spatial" parent="."]
 
-[node name="Imp" parent="." instance=ExtResource( 14 )]
+[node name="Imp" parent="Enemies" instance=ExtResource( 14 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 381.422, 7.63526, 289.53 )
+
+[node name="Grunt" parent="Enemies" instance=ExtResource( 11 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 184.199, 3.54743, 192.639 )
