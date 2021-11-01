@@ -8,16 +8,15 @@ enum {
 	ALERT #This is when they are in the Vision range but not within the shoot range
 	}
 
-export var speed = 1500 #I use export here for this variable so that you can physically see the varible in the editor
-
 var target = null #target doesn't equal anything yet
 var shootTimer = false #hitTimer is set to false
 var timer = null #there is no timer yet
 var shoot_delay = 2 #this is the delay on the hits from the enemy
 var can_shoot = true #this is a boolean to see if the enemy can hit or not, if it is true then the enemy is allowed
 #to hit the player
-var impHealth = 40#This is the current health of the Imp
+var impHealth = 100 #This is the current health of the Imp
 var shot_range = true
+var fire_ball = preload("res://Scenes/Fireball.tscn")
 
 onready var globals = get_node("/root/Globals") #I call on the globals node here so that I can use the global variables later in the code,
 #I use the onready variable here so that I don't have to put it into my ready script, it will just start up when the code is started.
@@ -26,9 +25,10 @@ onready var Imp = $Eyes #I then reference a spatial node that represents the eye
 #eyes are looking
 onready var state = IDLE #when the script starts the state is put automatically into idle
 
-const turnSpeed = 1 #speed that Imp turns
+const turnSpeed = 4 #speed that Imp turns
 const Height = 10 #Height of player
-const maxHealth = 40 #the Max health of the grunt
+const maxHealth = 100 #the Max health of the grunt
+onready var Impspeed = 800 #I use export here for this variable so that you can physically see the varible in the editor
 
 
 func _ready(): #everything in here will occur as soon as the node thats attatched to this script starts
@@ -43,6 +43,7 @@ func _ready(): #everything in here will occur as soon as the node thats attatche
 
 func on_timeout_complete(): #When the on_timeout_complete function is called
 	can_shoot = true #the boolean can_hit is equal to true, this means that the enemy is able to hit me again
+	Impspeed = 800
 
 func _process(delta): #function _process means that it processes everything within here every frame, however things like movement,
 #would be uneven if it was processed every frame. delta contains the time elapsed in seconds meaning that if you were to multiply 
@@ -58,7 +59,7 @@ func _process(delta): #function _process means that it processes everything with
 			#There are a multitude of benefits to using radians, we rotate the Grunts y axis by the eyes y axis timesed by the turnSpeed
 			#to make the turning seem more natural and slow it down a little.
 			KILL() #calls the KILL function
-			move_to_target(delta) #calls the move_to_target function		
+			move_to_target(delta) #calls the move_to_target function
 		IDLE:
 			pass #does not use this piece of script
 		
@@ -82,7 +83,7 @@ func _on_Vision_body_exited(body): #when the player exits the Vision area
 func move_to_target(delta): #function called in the KILL state
 	var direction = (target.transform.origin - transform.origin).normalized() #this gets a variable named the direction which houses the 
 	#players transform minused by the grunts origin and then the .normalized minuses that number by one
-	move_and_slide(direction * speed * delta, Vector3.UP) #this uses move_and_slide to move the player towards the Player, it timeses the
+	move_and_slide(direction * Impspeed * delta, Vector3.UP) #this uses move_and_slide to move the player towards the Player, it timeses the
 	#number we got just then (direction) by the speed and then delta to keep it consistent, it also moves on the UP vector, which can be 
 	#written as Vector3(0,1,0)
 
@@ -91,14 +92,25 @@ func KILL():
 	if Raycast.is_colliding(): #If the raycast is colliding with something . . .
 			var hit = Raycast.get_collider() #create a variable called hit, within that variable state what the raycast collided with
 			if hit.is_in_group("Player"): #if what it collided with was grouped with Player . . .
-				globals.health -= 20 #call the global script and within the global script minus the players health by 10
-				can_shoot = false #can_shoot is turned to false, meaning the Grunt cannot hit
-				timer.start() #restart the timer
+				if can_shoot == true:
+					fireball() #call the fireball function
+					can_shoot = false #can_shoot is turned to false, meaning the Grunt cannot hit
+					timer.start() #restart the timer
+					Impspeed = 0
 
 
 func bullet_hit(damage, bullet_hit_pos): #if the grunt is hit with a bullet
 	impHealth -= damage #current health of grunt is minused by the guns damage
 	if impHealth <= 0: #if the grunts health is below 0
-		queue_free() #kill the grunt
+		globals.score + 100 #increase score by 100
+		queue_free() #kill the Imp
+
+func fireball():
+	var clone = fire_ball.instance()
+	var scene_root = get_tree().root.get_children()[0]
+	scene_root.add_child(clone)
+
+	clone.global_transform = $Eyes.global_transform
+	clone.scale = Vector3(4, 4, 4)
 
 

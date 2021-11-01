@@ -1,10 +1,9 @@
-[gd_scene load_steps=41 format=2]
+[gd_scene load_steps=40 format=2]
 
 [ext_resource path="res://Scenes/Player.tscn" type="PackedScene" id=1]
 [ext_resource path="res://addons/zylann.hterrain/hterrain.gd" type="Script" id=2]
 [ext_resource path="res://addons/zylann.hterrain/hterrain_texture_set.gd" type="Script" id=3]
 [ext_resource path="res://Terrain/Ground/data.hterrain" type="Resource" id=4]
-[ext_resource path="res://Scripts/Doom_Arena.gd" type="Script" id=5]
 [ext_resource path="res://Textures/Brown_Rock/Rock029_2K_NormalDX.jpg" type="Texture" id=6]
 [ext_resource path="res://Textures/Dark_Rock/Rock031_2K_NormalGL.jpg" type="Texture" id=7]
 [ext_resource path="res://Textures/Dark_Rock/Rock031_2K_Color.jpg" type="Texture" id=8]
@@ -94,7 +93,6 @@ textures = [ [ ExtResource( 9 ), ExtResource( 8 ) ], [ ExtResource( 6 ), ExtReso
 
 [node name="Doom_Clone" type="Spatial"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -213.481, 0, 0 )
-script = ExtResource( 5 )
 
 [node name="Player" parent="." instance=ExtResource( 1 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 217.053, 1.57077, 39.6226 )
@@ -447,9 +445,6 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 214.286, 21.9252, 330.479 )
 
 [node name="HTerrain" type="Spatial" parent="Environment"]
 script = ExtResource( 2 )
-ambient_wind = 0.0
-lod_scale = 2.0
-map_scale = Vector3( 1, 1, 1 )
 _terrain_data = ExtResource( 4 )
 chunk_size = 32
 collision_enabled = true

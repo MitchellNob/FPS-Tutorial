@@ -7,15 +7,13 @@ enum {
 	KILL #KILL is the same as IDLE
 	}
 
-export var speed = 3000 #I use export here for this variable so that you can physically see the varible in the editor
-
 var target = null #target doesn't equal anything yet
 var hitTimer = false #hitTimer is set to false
 var timer = null #there is no timer yet
 var hit_delay = 2 #this is the delay on the hits from the enemy
 var can_hit = true #this is a boolean to see if the enemy can hit or not, if it is true then the enemy is allowed
 #to hit the player
-var gruntHealth = 20#This is the current health of the grunt
+var gruntHealth = 60#This is the current health of the grunt
 
 onready var globals = get_node("/root/Globals") #I call on the globals node here so that I can use the global variables later in the code,
 #I use the onready variable here so that I don't have to put it into my ready script, it will just start up when the code is started.
@@ -26,8 +24,8 @@ onready var state = IDLE #when the script starts the state is put automatically 
 
 const turnSpeed = 2 #speed that grunt turns
 const Height = 10 #Height of player
-const maxHealth = 20 #the Max health of the grunt
-
+const maxHealth = 60 #the Max health of the grunt
+const Gruntspeed = 3000 #I use export here for this variable so that you can physically see the varible in the editor
 
 func _ready(): #everything in here will occur as soon as the node thats attatched to this script starts
 	timer = Timer.new() #We create a new Timer node
@@ -78,7 +76,7 @@ func _on_Vision_body_exited(body): #when the player exits the Vision area
 func move_to_target(delta): #function called in the KILL state
 	var direction = (target.transform.origin - transform.origin).normalized() #this gets a variable named the direction which houses the 
 	#players transform minused by the grunts origin and then the .normalized minuses that number by one
-	move_and_slide(direction * speed * delta, Vector3.UP) #this uses move_and_slide to move the player towards the Player, it timeses the
+	move_and_slide(direction * Gruntspeed  * delta, Vector3.UP) #this uses move_and_slide to move the player towards the Player, it timeses the
 	#number we got just then (direction) by the speed and then delta to keep it consistent, it also moves on the UP vector, which can be 
 	#written as Vector3(0,1,0)
 
@@ -95,7 +93,7 @@ func KILL():
 func bullet_hit(damage, bullet_hit_pos): #if the grunt is hit with a bullet
 	gruntHealth -= damage #current health of grunt is minused by the guns damage
 	if gruntHealth <= 0: #if the grunts health is below 0
-		queue_free() #kill the grunt
-
+		globals.score += 100 #increase score by 100
+		queue_free() #kill the Grunt
 
 

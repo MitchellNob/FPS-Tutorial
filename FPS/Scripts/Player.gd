@@ -36,7 +36,6 @@ const MAX_HEALTH = 150 # Constant Variable for your maximum health
 
 #Miscellaenous
 var UI_status_label #
-var globals
 var flashlight #Flashlight node
 
 #Reloading
@@ -55,6 +54,7 @@ var grenade_amounts = {"Grenade":2, "Sticky Grenade":2}
 var current_grenade = "Grenade"
 var grenade_scene = preload("res://Scenes/Grenade.tscn") #this variable preloads the scene so that befroe the game starts the scene is already loaded and ready to be instantiated without an hiccups
 var sticky_grenade_scene = preload("res://Scenes/Sticky_Grenade.tscn")
+onready var globals = get_node("/root/Globals")
 const GRENADE_THROW_FORCE = 50
 
 #Grabbing System
@@ -72,7 +72,6 @@ var is_dead = false
 var Gun_selection = false
 
 func _ready():
-	globals = get_node("/root/Globals")
 	global_transform.origin = globals.get_respawn_position()
 	
 	#Stores the Camera and Rotation helper nodes into their variables
@@ -140,14 +139,15 @@ func process_input(delta):
 	var input_movement_vector = Vector2() #we set a vector2 into a variable so that we can move on 2D axis
 	
 	#If we press WASD it moves us in the corresponding direction by adding or subtracting one to the corresponding axis on the 2D plane
-	if Input.is_action_pressed("movement_forward"):
-		input_movement_vector.y += 1
-	if Input.is_action_pressed("movement_backward"):
-		input_movement_vector.y -= 1
-	if Input.is_action_pressed("movement_left"):
-		input_movement_vector.x -= 1
-	if Input.is_action_pressed("movement_right"):
-		input_movement_vector.x = 1
+	if globals.process_input == true:
+		if Input.is_action_pressed("movement_forward"):
+			input_movement_vector.y += 1
+		if Input.is_action_pressed("movement_backward"):
+			input_movement_vector.y -= 1
+		if Input.is_action_pressed("movement_left"):
+			input_movement_vector.x -= 1
+		if Input.is_action_pressed("movement_right"):
+			input_movement_vector.x = 1
 
 	input_movement_vector = input_movement_vector.normalized()
 	
@@ -254,14 +254,15 @@ func process_input(delta):
 	# ----------------------------------
 	# Gun Selection Menu
 	#If the TAB key is pressed then the Gun selection menu becomes visible and
-	if Input.is_action_pressed("ui_focus_next"):
-		$HUD/Radial_Menu.visible = true
-		Input.set_mouse_mode(Input.MOUSE_MODE_CONFINED)
-		Gun_selection = true
-	else:
-		$HUD/Radial_Menu.visible = false
-		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
-		Gun_selection = false
+	if globals.process_input == true:
+		if Input.is_action_pressed("ui_focus_next"):
+			$HUD/Radial_Menu.visible = true
+			Input.set_mouse_mode(Input.MOUSE_MODE_CONFINED)
+			Gun_selection = true
+		elif Input.is_action_just_released("ui_focus_next"):
+			$HUD/Radial_Menu.visible = false
+			Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+			Gun_selection = false
 	# ----------------------------------
 	
 	

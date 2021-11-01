@@ -4118,7 +4118,7 @@ script = ExtResource( 8 )
 transform = Transform( -1, 0, 3.25841e-07, 0, 1, 0, -3.25841e-07, 0, -1, 0, -0.307539, -0.0646362 )
 current = true
 fov = 90.0
-far = 180.0
+far = 442.0
 
 [node name="Gun_Fire_Points" type="Spatial" parent="Rotation_Helper"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -12.3914, 0 )
@@ -4175,6 +4175,9 @@ margin_left = -1.0
 margin_top = -7.0
 margin_right = -1.0
 margin_bottom = -7.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="Crosshair" type="Control" parent="HUD"]
 modulate = Color( 1, 1, 1, 0.705882 )
@@ -4283,6 +4286,7 @@ align = 1
 valign = 1
 
 [node name="Radial_Menu" type="Panel" parent="HUD"]
+visible = false
 margin_left = 287.0
 margin_top = 290.0
 margin_right = 991.0
