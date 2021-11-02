@@ -15,6 +15,7 @@ var popup = null
 onready var health = 100
 var score = 0
 var process_input = true
+var use_time = false
 
 var respawn_points = null
 

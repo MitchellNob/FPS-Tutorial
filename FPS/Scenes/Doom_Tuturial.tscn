@@ -92,22 +92,14 @@ mode = 0
 textures = [ [ ExtResource( 9 ), ExtResource( 8 ) ], [ ExtResource( 6 ), ExtResource( 7 ) ] ]
 
 [node name="Doom_Clone" type="Spatial"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -213.481, 0, 0 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -213.481, 0, -16.8828 )
 script = ExtResource( 5 )
 doom_round_1 = "res://Scenes/Round_One.tscn"
 
 [node name="Player" parent="." instance=ExtResource( 1 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 217.053, 1.57077, 39.6226 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 217.053, 1.57077, 48.6955 )
 
-<<<<<<< Updated upstream
-[node name="Tutorial" type="Control" parent="Player"]
-margin_right = 40.0
-margin_bottom = 40.0
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Panel2" type="Panel" parent="Player/Tutorial"]
+[node name="Panel" type="Panel" parent="Player"]
 visible = false
 margin_left = 356.375
 margin_top = 149.57
@@ -117,26 +109,32 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Label" type="Label" parent="Player/Tutorial/Panel2"]
-margin_left = 61.7283
-margin_top = 62.433
-margin_right = 295.728
-margin_bottom = 173.433
+[node name="Label" type="Label" parent="Player/Panel"]
+margin_left = 24.4717
+margin_top = -12.7152
+margin_right = 289.472
+margin_bottom = 190.285
 rect_scale = Vector2( 2, 2 )
-text = "You awaken after being transported
-to hell, confused and hungry for 
-more blood"
+text = "You venture through the 
+portal and find yourself at
+hells doorstep"
 align = 1
 valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
-[node name="first_button" type="Button" parent="Player/Tutorial/Panel2"]
+[node name="first_button" type="Button" parent="Player/Panel"]
 margin_left = 404.33
 margin_top = 293.734
 margin_right = 531.33
 margin_bottom = 341.734
-text = "NEXT"
+text = "Next"
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
-[node name="Panel3" type="Panel" parent="Player/Tutorial"]
+[node name="Panel2" type="Panel" parent="Player"]
 visible = false
 margin_left = 356.375
 margin_top = 149.57
@@ -146,37 +144,34 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Label" type="Label" parent="Player/Tutorial/Panel3"]
-margin_left = 62.0
-margin_top = 62.0
-margin_right = 296.0
-margin_bottom = 106.0
+[node name="Label" type="Label" parent="Player/Panel2"]
+margin_left = 24.4717
+margin_top = -12.7152
+margin_right = 289.472
+margin_bottom = 190.285
 rect_scale = Vector2( 2, 2 )
-text = "Hold TAB to change weapons"
+text = "Tab to change weapons
+WASD to move
+Space to jump and 
+press again to double jump
+"
 align = 1
 valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
-[node name="Label2" type="Label" parent="Player/Tutorial/Panel3"]
-margin_left = 131.0
-margin_top = 147.0
-margin_right = 365.0
-margin_bottom = 257.0
-rect_scale = Vector2( 1.3, 1.3 )
-text = "WASD to move
-G to fire grenades
-Press space to jump 
-and again to double jump"
-align = 1
-valign = 1
-
-[node name="second_button" type="Button" parent="Player/Tutorial/Panel3"]
+[node name="second_button" type="Button" parent="Player/Panel2"]
 margin_left = 404.33
 margin_top = 293.734
 margin_right = 531.33
 margin_bottom = 341.734
-text = "NEXT"
+text = "Next"
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
-[node name="Panel4" type="Panel" parent="Player/Tutorial"]
+[node name="Panel3" type="Panel" parent="Player"]
 visible = false
 margin_left = 356.375
 margin_top = 149.57
@@ -186,30 +181,30 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Label" type="Label" parent="Player/Tutorial/Panel4"]
-margin_left = 64.6697
-margin_top = 110.054
-margin_right = 298.67
-margin_bottom = 154.054
+[node name="Label" type="Label" parent="Player/Panel3"]
+margin_left = 24.4717
+margin_top = -12.7152
+margin_right = 289.472
+margin_bottom = 190.285
 rect_scale = Vector2( 2, 2 )
-text = "Kill the enemy in front of you
-in order to begin what you
-came here to do, Doomslayer"
+text = "Kill the enemy
+to begin Round 1"
 align = 1
 valign = 1
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="third_button" type="Button" parent="Player/Tutorial/Panel4"]
+[node name="third_button" type="Button" parent="Player/Panel3"]
 margin_left = 404.33
 margin_top = 293.734
 margin_right = 531.33
 margin_bottom = 341.734
-text = "NEXT"
+text = "Close"
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
-=======
->>>>>>> Stashed changes
 [node name="Environment" type="Spatial" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 2.74052, 0, 0 )
 
@@ -218,6 +213,13 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 2.74052, 0, 0 )
 [node name="StaticBody5" type="StaticBody" parent="Environment/Walls"]
 
 [node name="CollisionShape2" type="CollisionShape" parent="Environment/Walls/StaticBody5"]
+transform = Transform( 0.959369, 0, -2.83314, 0, -23.6036, 0, 0.0628301, 0, 43.2599, 174.439, 20.9219, 56.0579 )
+shape = SubResource( 1 )
+
+[node name="StaticBody16" type="StaticBody" parent="Environment/Walls"]
+transform = Transform( -0.154141, 0, 0.988049, 0, 1, 0, -0.988049, 0, -0.154141, 174.317, 0, 185.75 )
+
+[node name="CollisionShape2" type="CollisionShape" parent="Environment/Walls/StaticBody16"]
 transform = Transform( 0.959369, 0, -2.83314, 0, -23.6036, 0, 0.0628301, 0, 43.2599, 174.439, 20.9219, 56.0579 )
 shape = SubResource( 1 )
 
@@ -551,9 +553,6 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 214.286, 21.9252, 330.479 )
 
 [node name="HTerrain" type="Spatial" parent="Environment"]
 script = ExtResource( 2 )
-ambient_wind = 0.0
-lod_scale = 2.0
-map_scale = Vector3( 1, 1, 1 )
 _terrain_data = ExtResource( 4 )
 chunk_size = 32
 collision_enabled = true
@@ -568,16 +567,9 @@ shader_params/u_depth_blending = true
 shader_params/u_triplanar = false
 shader_params/u_tile_reduction = Plane( 0, 0, 0, 0 )
 
-<<<<<<< Updated upstream
-[node name="Enemies" type="Spatial" parent="." groups=[
-"Enemies",
-]]
+[node name="Grunt" parent="." instance=ExtResource( 11 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 204.402, 3.54743, 192.639 )
 
-[node name="Grunt" parent="Enemies" instance=ExtResource( 11 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 198.693, 3.54743, 250.255 )
-[connection signal="pressed" from="Player/Tutorial/Panel2/first_button" to="." method="_on_first_button_pressed"]
-[connection signal="pressed" from="Player/Tutorial/Panel3/second_button" to="." method="_on_second_button_pressed"]
-[connection signal="pressed" from="Player/Tutorial/Panel4/third_button" to="." method="_on_third_button_pressed"]
-=======
-[node name="Grunt" type="KinematicBody" parent="."]
->>>>>>> Stashed changes
+[connection signal="pressed" from="Player/Panel/first_button" to="." method="_on_first_button_pressed"]
+[connection signal="pressed" from="Player/Panel2/second_button" to="." method="_on_second_button_pressed"]
+[connection signal="pressed" from="Player/Panel3/third_button" to="." method="_on_third_button_pressed"]

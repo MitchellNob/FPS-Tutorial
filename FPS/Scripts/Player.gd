@@ -35,7 +35,8 @@ const MAX_HEALTH = 150 # Constant Variable for your maximum health
 
 
 #Miscellaenous
-var UI_status_label #
+var UI_status_label 
+var Score_label
 var flashlight #Flashlight node
 
 #Reloading
@@ -67,6 +68,8 @@ const OBJECT_GRAB_RAY_DISTANCE = 10
 const RESPAWN_TIME = 4
 var dead_time = 0
 var is_dead = false
+onready var respawn_count = 3
+export (String, FILE) var Lose_scene
 
 #Radial Menu
 var Gun_selection = false
@@ -100,6 +103,7 @@ func _ready():
 	changing_weapon_name = "UNARMED"
 	
 	UI_status_label = $HUD/Panel/Gun_label
+	Score_label = $HUD/Score_Label
 	
 	#assigns the flashlight node to the variable
 	flashlight = $Rotation_Helper/Flashlight
@@ -465,13 +469,16 @@ func process_UI(delta):
 	#if it does then it only shows the health of your character and the ammo fo your grenades
 	#if you are currently holding an actual weapon then the text will show your health along with your weapon ammo, spare ammo and grenade ammo
 	if current_weapon_name == "UNARMED" or current_weapon_name == "KNIFE": 
+		UI_status_label.text = "Score: %s" % globals.score
 		UI_status_label.text = "HEALTH: " + str(get_node("/root/Globals").health) + \
 				"\n" + current_grenade + ": " + str(grenade_amounts[current_grenade])
 	else:
 		var current_weapon = weapons[current_weapon_name]
+		UI_status_label.text = "Score: %s" % globals.score
 		UI_status_label.text = "HEALTH: " + str(get_node("/root/Globals").health) + \
 				"\nAMMO: " + str(current_weapon.ammo_in_weapon) + "/" + str(current_weapon.spare_ammo) + \
 				"\n" + current_grenade + ": " + str(grenade_amounts[current_grenade])
+	Score_label.text = "Score: %s" % globals.score
 
 func process_reloading(delta):
 	if reloading_weapon == true:
@@ -498,10 +505,12 @@ func process_respawn(delta):
 	#If our health is less than or equal to 0 and we are not already dead 
 	#We make it so that we are changing weapons and we are unarmed
 	#We then add the death screen panel and disable our HUD, we set is dead to true, throw any objects we have in our hands using an impulse and start the respawn timer
-	if get_node("/root/Globals").health <= 0 and !is_dead:
+	if get_node("/root/Globals").health <= 0 and !is_dead and respawn_count >= 0:
 		$Body_CollisionShape.disabled = true
 		$Feet_CollisionShape.disabled = true
-	
+		
+		respawn_count -= 1
+		
 		changing_weapon = true
 		changing_weapon_name = "UNARMED"
 	
@@ -549,6 +558,9 @@ func process_respawn(delta):
 			current_grenade = "Grenade"
 	
 			is_dead = false
+	
+		if respawn_count == 0:
+			get_node("/root/Globals").load_new_scene(Lose_scene)
 
 func create_sound(sound_name, position=null):
 	globals.play_sound(sound_name, false, position)
@@ -590,3 +602,4 @@ func Gun_Selection(button_name):
 				changing_weapon_name = WEAPON_NUMBER_TO_NAME[weapon_change_number]
 				changing_weapon = true
 				mouse_scroll_value = weapon_change_number
+

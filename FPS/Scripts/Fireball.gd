@@ -15,4 +15,3 @@ func _physics_process(delta): #
 func _on_Area_body_entered(body): #if something enters the CollisionShape store in a variable called body . . .
 	if body.is_in_group("Player"): #if the body is also in the group Player . . .
 		globals.health -= 20 #minus 20 health from the players global health
-		print ("hit")

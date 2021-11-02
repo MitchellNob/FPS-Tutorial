@@ -28,7 +28,8 @@ onready var state = IDLE #when the script starts the state is put automatically 
 const turnSpeed = 4 #speed that Imp turns
 const Height = 10 #Height of player
 const maxHealth = 100 #the Max health of the Imp
-onready var Impspeed = 800 #I use export here for this variable so that you can physically see the varible in the editor
+onready var Impspeed = 450 #I use export here for this variable so that you can physically see the varible in the editor,  I find that sometimes the speed
+#varies depending on the computer you are on
 
 
 func _ready(): #everything in here will occur as soon as the node thats attatched to this script starts
@@ -43,7 +44,7 @@ func _ready(): #everything in here will occur as soon as the node thats attatche
 
 func on_timeout_complete(): #When the on_timeout_complete function is called
 	can_shoot = true #the boolean can_hit is equal to true, this means that the enemy is able to hit me again
-	Impspeed = 800 #once the timer is complete and the imp is allowed to shoot again it can also move again
+	Impspeed = 450 #once the timer is complete and the imp is allowed to shoot again it can also move again
 
 func _process(delta): #function _process means that it processes everything within here every frame, however things like movement,
 #would be uneven if it was processed every frame. delta contains the time elapsed in seconds meaning that if you were to multiply 

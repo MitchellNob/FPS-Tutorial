@@ -1,11 +1,6 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=2 format=2]
 
 [ext_resource path="res://Scripts/Lose_Script.gd" type="Script" id=1]
-
-[sub_resource type="Shader" id=1]
-
-[sub_resource type="ShaderMaterial" id=2]
-shader = SubResource( 1 )
 
 [node name="Control" type="Control"]
 anchor_right = 1.0
@@ -19,13 +14,25 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 menu_scene = "res://Scenes/Main_Menu.tscn"
-doom_scene = "res://Scenes/Doom_Clone.tscn"
+doom_scene = "res://Scenes/Doom_Tuturial.tscn"
 
 [node name="Death_screen" type="Panel" parent="."]
 margin_left = 377.0
 margin_top = 194.0
 margin_right = 909.0
 margin_bottom = 509.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Stats" type="Label" parent="Death_screen"]
+margin_left = 185.0
+margin_top = 182.0
+margin_right = 348.0
+margin_bottom = 278.0
+text = "Stats:"
+align = 1
+valign = 1
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -66,18 +73,5 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Panel" type="Panel" parent="Death_screen"]
-material = SubResource( 2 )
-margin_left = 285.0
-margin_top = 175.0
-margin_right = 502.0
-margin_bottom = 295.0
-
-[node name="Label" type="Label" parent="Death_screen/Panel"]
-margin_left = 27.0
-margin_top = 7.0
-margin_right = 190.0
-margin_bottom = 103.0
-text = "stats"
-align = 1
-valign = 1
+[connection signal="pressed" from="Death_screen/Button_Start_Over" to="." method="_on_Button_Start_Over_pressed"]
+[connection signal="pressed" from="Death_screen/Button_Main_Menu" to="." method="_on_Button_Main_Menu_pressed"]

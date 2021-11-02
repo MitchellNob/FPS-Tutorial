@@ -3897,6 +3897,7 @@ font_data = ExtResource( 13 )
 "Player",
 ]]
 script = ExtResource( 1 )
+Lose_scene = "res://Scenes/Lose_Scene.tscn"
 
 [node name="Body_CollisionShape" type="CollisionShape" parent="."]
 transform = Transform( 1, 0, 0, 0, -1.62921e-07, -1, 0, 1, -1.62921e-07, 0, 5.81098, 0 )
@@ -4179,6 +4180,20 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="Score_Label" type="Label" parent="HUD"]
+anchor_right = 0.256
+margin_left = 300.0
+margin_top = 11.417
+margin_right = 320.32
+margin_bottom = 92.417
+rect_scale = Vector2( 2, 2 )
+text = "Score:"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
 [node name="Crosshair" type="Control" parent="HUD"]
 modulate = Color( 1, 1, 1, 0.705882 )
 anchor_left = 0.5
@@ -4239,6 +4254,9 @@ margin_bottom = 12.5
 rect_rotation = 90.0
 texture = ExtResource( 12 )
 expand = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="Panel" type="Panel" parent="HUD"]
 modulate = Color( 1, 1, 1, 0.705882 )
@@ -4250,8 +4268,9 @@ custom_styles/panel = SubResource( 24 )
 [node name="Panel_border" type="Panel" parent="HUD/Panel"]
 modulate = Color( 0.679688, 0.679688, 0.679688, 1 )
 show_behind_parent = true
+margin_left = -1.33484
 margin_top = -10.0
-margin_right = 380.0
+margin_right = 378.665
 margin_bottom = 160.0
 custom_styles/panel = SubResource( 24 )
 __meta__ = {
@@ -4268,7 +4287,11 @@ custom_fonts/font = SubResource( 25 )
 custom_colors/font_color = Color( 1, 1, 1, 1 )
 text = "Health: 100
 Ammo: 000/000
+Score: 
 "
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="Death_Screen" type="ColorRect" parent="HUD"]
 visible = false
@@ -4385,3 +4408,5 @@ valign = 1
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="Timer" type="Timer" parent="."]

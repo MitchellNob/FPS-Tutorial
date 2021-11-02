@@ -25,7 +25,7 @@ onready var state = IDLE #when the script starts the state is put automatically 
 const turnSpeed = 2 #speed that grunt turns
 const Height = 10 #Height of player
 const maxHealth = 50 #the Max health of the grunt
-const Gruntspeed = 2000 #I use export here for this variable so that you can physically see the varible in the editor
+const Gruntspeed = 2500 #constant variable for the speed of the grunt
 
 func _ready(): #everything in here will occur as soon as the node thats attatched to this script starts
 	timer = Timer.new() #We create a new Timer node

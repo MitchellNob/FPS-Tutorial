@@ -69,7 +69,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 testing_area_scene = "res://Scenes/Testing_Area.tscn"
-doom_clone = "res://Scenes/Doom_Clone.tscn"
+doom_clone = "res://Scenes/Doom_Tuturial.tscn"
 
 [node name="Background_Animation" type="Spatial" parent="."]
 
@@ -89,6 +89,9 @@ modulate = Color( 1, 1, 1, 0.901961 )
 margin_right = 350.0
 margin_bottom = 725.0
 custom_styles/panel = SubResource( 4 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="Title_Label" type="Label" parent="Start_Menu"]
 margin_left = 20.0

@@ -13,7 +13,7 @@ var timer = null #there is no timer yet
 var hit_delay = 2 #this is the delay on the hits from the enemy
 var can_hit = true #this is a boolean to see if the enemy can hit or not, if it is true then the enemy is allowed
 #to hit the player
-var pinkyHealth = 300#This is the current health of the Pinky
+var pinkyHealth = 600#This is the current health of the Pinky
 
 onready var globals = get_node("/root/Globals") #I call on the globals node here so that I can use the global variables later in the code,
 #I use the onready variable here so that I don't have to put it into my ready script, it will just start up when the code is started.
@@ -22,10 +22,10 @@ onready var Pinky = $Eyes #I then reference a spatial node that represents the e
 #eyes are looking
 onready var state = IDLE #when the script starts the state is put automatically into idle
 
-const turnSpeed = 3 #speed that Pinky turns
+const turnSpeed = 4 #speed that Pinky turns
 const Height = 10 #Height of player
-const maxHealth = 50 #the Max health of the Pinky
-const Pinkyspeed = 2200 #I use export here for this variable so that you can physically see the varible in the editor
+const maxHealth = 600 #the Max health of the Pinky
+const Pinkyspeed = 3500 #I use export here for this variable so that you can physically see the varible in the editor
 
 func _ready(): #everything in here will occur as soon as the node thats attatched to this script starts
 	timer = Timer.new() #We create a new Timer node
@@ -93,5 +93,6 @@ func KILL():
 func bullet_hit(damage, bullet_hit_pos): #if the Pinky is hit with a bullet
 	pinkyHealth -= damage #current health of Pinky is minused by the guns damage
 	if pinkyHealth <= 0: #if the Pinkys health is below 0
+		print("death")
 		globals.score += 1000 #increase score by 100
 		queue_free() #kill the Pinky

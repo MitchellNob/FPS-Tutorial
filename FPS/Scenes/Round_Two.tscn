@@ -92,7 +92,7 @@ mode = 0
 textures = [ [ ExtResource( 10 ), ExtResource( 9 ) ], [ ExtResource( 11 ), ExtResource( 6 ) ] ]
 
 [node name="Doom_Clone" type="Spatial"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -213.481, 0, 0 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -213.481, 0, -27.0894 )
 script = ExtResource( 8 )
 doom_round_3 = "res://Scenes/Round_Three.tscn"
 
@@ -136,6 +136,13 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 2.74052, 0, 0 )
 [node name="StaticBody5" type="StaticBody" parent="Environment/Walls"]
 
 [node name="CollisionShape2" type="CollisionShape" parent="Environment/Walls/StaticBody5"]
+transform = Transform( 0.959369, 0, -2.83314, 0, -23.6036, 0, 0.0628301, 0, 43.2599, 174.439, 20.9219, 56.0579 )
+shape = SubResource( 1 )
+
+[node name="StaticBody16" type="StaticBody" parent="Environment/Walls"]
+transform = Transform( -0.154141, 0, 0.988049, 0, 1, 0, -0.988049, 0, -0.154141, 174.317, 0, 185.75 )
+
+[node name="CollisionShape2" type="CollisionShape" parent="Environment/Walls/StaticBody16"]
 transform = Transform( 0.959369, 0, -2.83314, 0, -23.6036, 0, 0.0628301, 0, 43.2599, 174.439, 20.9219, 56.0579 )
 shape = SubResource( 1 )
 
@@ -469,9 +476,6 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 214.286, 21.9252, 330.479 )
 
 [node name="HTerrain" type="Spatial" parent="Environment"]
 script = ExtResource( 1 )
-ambient_wind = 0.0
-lod_scale = 2.0
-map_scale = Vector3( 1, 1, 1 )
 _terrain_data = ExtResource( 7 )
 chunk_size = 32
 collision_enabled = true
@@ -489,17 +493,8 @@ shader_params/u_tile_reduction = Plane( 0, 0, 0, 0 )
 [node name="Imp" parent="." instance=ExtResource( 3 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 381.422, 7.63526, 289.53 )
 
-[node name="Imp2" parent="." instance=ExtResource( 3 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 325.937, 7.63526, 289.53 )
-
 [node name="Imp3" parent="." instance=ExtResource( 3 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 255.12, 7.63526, 289.53 )
-
-[node name="Imp4" parent="." instance=ExtResource( 3 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 255.12, 7.63526, 231.677 )
-
-[node name="Imp5" parent="." instance=ExtResource( 3 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 179.076, 7.63526, 231.677 )
 
 [node name="Imp6" parent="." instance=ExtResource( 3 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 119.744, 7.63526, 231.677 )
@@ -508,8 +503,6 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 119.744, 7.63526, 231.677 )
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 119.744, 7.63526, 383.935 )
 
 [node name="Imp8" parent="." instance=ExtResource( 3 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 305.624, 7.63526, 383.935 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 393.362, 7.63526, 389.813 )
 
-[node name="Imp9" parent="." instance=ExtResource( 3 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 118.804, 7.63526, 310.232 )
 [connection signal="pressed" from="Player/Panel/Button" to="." method="_on_Button_pressed"]

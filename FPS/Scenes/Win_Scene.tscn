@@ -1,11 +1,6 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=2 format=2]
 
-[ext_resource path="res://Scripts/Lose_Script.gd" type="Script" id=1]
-
-[sub_resource type="Shader" id=1]
-
-[sub_resource type="ShaderMaterial" id=2]
-shader = SubResource( 1 )
+[ext_resource path="res://Scenes/Win_Scene.gd" type="Script" id=1]
 
 [node name="Control" type="Control"]
 anchor_right = 1.0
@@ -18,27 +13,41 @@ script = ExtResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
-menu_scene = "res://Scenes/Main_Menu.tscn"
-doom_scene = "res://Scenes/Doom_Clone.tscn"
+Main_Menu = "res://Scenes/Main_Menu.tscn"
+Doom_Tutorial = "res://Scenes/Doom_Tuturial.tscn"
 
 [node name="Death_screen" type="Panel" parent="."]
-margin_left = 377.0
+margin_left = 375.502
 margin_top = 193.0
-margin_right = 909.0
+margin_right = 907.502
 margin_bottom = 508.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="stats" type="Label" parent="Death_screen"]
+margin_left = 185.0
+margin_top = 180.508
+margin_right = 337.0
+margin_bottom = 265.508
+text = "Score"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
 [node name="Label" type="Label" parent="Death_screen"]
-margin_left = 74.0
-margin_top = 38.0
-margin_right = 332.0
-margin_bottom = 86.0
+margin_left = 60.0
+margin_top = 39.498
+margin_right = 330.0
+margin_bottom = 121.498
 rect_scale = Vector2( 1.5, 1.5 )
-text = "The slayer takes the portal, to the
-shores of hell, where he will continue
-to kill hells spawn until his dying breath."
+text = "The slayer, kills the pinky
+ending the immediate threat to 
+humanity. In the distance the slayer hears
+the call of more demons
+This is only the beginning"
 align = 1
 valign = 1
 __meta__ = {
@@ -64,18 +73,5 @@ margin_bottom = 308.0
 rect_scale = Vector2( 0.75, 0.75 )
 text = "Main Menu"
 
-[node name="Panel" type="Panel" parent="Death_screen"]
-material = SubResource( 2 )
-margin_left = 285.0
-margin_top = 175.0
-margin_right = 502.0
-margin_bottom = 295.0
-
-[node name="Label" type="Label" parent="Death_screen/Panel"]
-margin_left = 44.0
-margin_top = 13.0
-margin_right = 196.0
-margin_bottom = 98.0
-text = "stats"
-align = 1
-valign = 1
+[connection signal="pressed" from="Death_screen/Button_Start_Over" to="." method="_on_Button_Start_Over_pressed"]
+[connection signal="pressed" from="Death_screen/Button_Main_Menu" to="." method="_on_Button_Main_Menu_pressed"]
