@@ -92,7 +92,7 @@ func move_to_target(delta): #function called in the KILL state
 func KILL():
 	if Raycast.is_colliding(): #If the raycast is colliding with something . . .
 			var hit = Raycast.get_collider() #create a variable called hit, within that variable state what the raycast collided with
-			if hit.is_in_group("Player"): #if what it collided with was grouped with Player . . .
+			if hit.is_in_group("Player"): #if what it colslided with was grouped with Player . . .
 				if can_shoot == true:
 					fireball() #call the fireball function
 					can_shoot = false #can_shoot is turned to false, meaning the Imp cannot hit

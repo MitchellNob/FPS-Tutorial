@@ -1,10 +1,52 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://Scripts/Fireball.gd" type="Script" id=1]
 
+[sub_resource type="SpatialMaterial" id=8]
+albedo_color = Color( 0.619608, 0, 0, 1 )
+
 [sub_resource type="SphereMesh" id=1]
+material = SubResource( 8 )
 
 [sub_resource type="SphereShape" id=2]
+
+[sub_resource type="Curve" id=3]
+_data = [ Vector2( 0, 0.431818 ), 0.0, 0.0, 0, 0, Vector2( 0.0357143, 1 ), 0.0, 0.0, 0, 0, Vector2( 1, 0 ), 0.0, 0.0, 0, 0 ]
+
+[sub_resource type="CurveTexture" id=4]
+curve = SubResource( 3 )
+
+[sub_resource type="ParticlesMaterial" id=5]
+trail_divisor = 6
+emission_shape = 1
+emission_sphere_radius = 0.4
+direction = Vector3( 0, 1, 0 )
+spread = 3.0
+gravity = Vector3( 0, 0, 0 )
+initial_velocity = 5.0
+initial_velocity_random = 0.1
+angular_velocity = 40.0
+angular_velocity_random = 1.0
+linear_accel = 4.0
+linear_accel_random = 1.0
+angle = 360.0
+angle_random = 1.0
+scale = 0.8
+scale_curve = SubResource( 4 )
+
+[sub_resource type="SpatialMaterial" id=6]
+flags_transparent = true
+flags_unshaded = true
+vertex_color_use_as_albedo = true
+params_blend_mode = 1
+params_billboard_mode = 3
+particles_anim_h_frames = 1
+particles_anim_v_frames = 1
+particles_anim_loop = false
+albedo_color = Color( 0.552941, 0.0509804, 0.0509804, 1 )
+
+[sub_resource type="QuadMesh" id=7]
+material = SubResource( 6 )
 
 [node name="Spatial" type="Spatial"]
 script = ExtResource( 1 )
@@ -19,5 +61,14 @@ material/0 = null
 [node name="CollisionShape" type="CollisionShape" parent="Area"]
 transform = Transform( 0.6, 0, 0, 0, 0.6, 0, 0, 0, 0.6, 0, 0, 0 )
 shape = SubResource( 2 )
+
+[node name="Particles" type="Particles" parent="."]
+amount = 200
+lifetime = 2.5
+randomness = 1.0
+local_coords = false
+draw_order = 2
+process_material = SubResource( 5 )
+draw_pass_1 = SubResource( 7 )
 
 [connection signal="body_entered" from="Area" to="." method="_on_Area_body_entered"]

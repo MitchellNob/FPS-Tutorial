@@ -32,6 +32,7 @@ material/0 = SubResource( 2 )
 
 [node name="CollisionShape" type="CollisionShape" parent="."]
 transform = Transform( 2, 0, 0, 0, -1.39182e-07, -3.18411, 0, 2, -8.74228e-08, 0, 5.2177, 0 )
+visible = false
 shape = SubResource( 3 )
 
 [node name="MeshInstance2" type="MeshInstance" parent="."]
@@ -56,5 +57,6 @@ cast_to = Vector3( 100, 0, 0 )
 
 [node name="Eyes" type="Spatial" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.46978, 0 )
+
 [connection signal="body_entered" from="Vision" to="." method="_on_Vision_body_entered"]
 [connection signal="body_exited" from="Vision" to="." method="_on_Vision_body_exited"]

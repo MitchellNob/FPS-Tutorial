@@ -31,6 +31,7 @@ material/0 = SubResource( 2 )
 
 [node name="CollisionShape" type="CollisionShape" parent="."]
 transform = Transform( 5.91101, 0, 0, 0, -9.23653e-08, -2.11307, 0, 6.5186, -2.84937e-07, 0, 3.03874, 0 )
+visible = false
 shape = SubResource( 3 )
 
 [node name="MeshInstance2" type="MeshInstance" parent="."]
