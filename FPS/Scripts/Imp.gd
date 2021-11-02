@@ -102,7 +102,7 @@ func KILL():
 func bullet_hit(damage, bullet_hit_pos): #if the Imp is hit with a bullet
 	impHealth -= damage #current health of Imp is minused by the guns damage
 	if impHealth <= 0: #if the Imps health is below 0
-		globals.score + 100 #increase score by 100
+		globals.score += 100 #increase score by 100
 		queue_free() #kill the Imp
 
 func fireball(): #The fireball function

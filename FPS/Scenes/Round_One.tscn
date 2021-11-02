@@ -4,6 +4,7 @@
 [ext_resource path="res://addons/zylann.hterrain/hterrain.gd" type="Script" id=2]
 [ext_resource path="res://addons/zylann.hterrain/hterrain_texture_set.gd" type="Script" id=3]
 [ext_resource path="res://Terrain/Ground/data.hterrain" type="Resource" id=4]
+[ext_resource path="res://Scripts/Round_One.gd" type="Script" id=5]
 [ext_resource path="res://Textures/Brown_Rock/Rock029_2K_NormalDX.jpg" type="Texture" id=6]
 [ext_resource path="res://Textures/Dark_Rock/Rock031_2K_NormalGL.jpg" type="Texture" id=7]
 [ext_resource path="res://Textures/Dark_Rock/Rock031_2K_Color.jpg" type="Texture" id=8]
@@ -12,7 +13,6 @@
 [ext_resource path="res://Scenes/Grunt.tscn" type="PackedScene" id=11]
 [ext_resource path="res://Scenes/Ammo_Pickup.tscn" type="PackedScene" id=12]
 [ext_resource path="res://Scenes/Health_Pickup.tscn" type="PackedScene" id=13]
-[ext_resource path="res://Scenes/Imp.tscn" type="PackedScene" id=14]
 
 [sub_resource type="BoxShape" id=1]
 extents = Vector3( 1, 1, 0.852809 )
@@ -93,13 +93,42 @@ textures = [ [ ExtResource( 9 ), ExtResource( 8 ) ], [ ExtResource( 6 ), ExtReso
 
 [node name="Doom_Clone" type="Spatial"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -213.481, 0, 0 )
+script = ExtResource( 5 )
+doom_round_2 = "res://Scenes/Round_Two.tscn"
 
 [node name="Player" parent="." instance=ExtResource( 1 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 217.053, 1.57077, 39.6226 )
 
-[node name="Control" type="Control" parent="Player"]
-margin_right = 40.0
-margin_bottom = 40.0
+[node name="Panel" type="Panel" parent="Player"]
+visible = false
+margin_left = 356.375
+margin_top = 149.57
+margin_right = 941.375
+margin_bottom = 520.57
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="Player/Panel"]
+margin_left = 24.4717
+margin_top = -12.7152
+margin_right = 289.472
+margin_bottom = 190.285
+rect_scale = Vector2( 2, 2 )
+text = "Rip and tear 
+until it is done"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Button" type="Button" parent="Player/Panel"]
+margin_left = 404.33
+margin_top = 293.734
+margin_right = 531.33
+margin_bottom = 341.734
+text = "CLOSE"
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -445,6 +474,9 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 214.286, 21.9252, 330.479 )
 
 [node name="HTerrain" type="Spatial" parent="Environment"]
 script = ExtResource( 2 )
+ambient_wind = 0.0
+lod_scale = 2.0
+map_scale = Vector3( 1, 1, 1 )
 _terrain_data = ExtResource( 4 )
 chunk_size = 32
 collision_enabled = true
@@ -462,5 +494,42 @@ shader_params/u_tile_reduction = Plane( 0, 0, 0, 0 )
 [node name="Grunt" parent="." instance=ExtResource( 11 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 184.199, 3.54743, 192.639 )
 
-[node name="Imp" parent="." instance=ExtResource( 14 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 381.422, 7.63526, 289.53 )
+[node name="Grunt14" parent="." instance=ExtResource( 11 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 115.741, 3.54743, 127.987 )
+
+[node name="Grunt2" parent="." instance=ExtResource( 11 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 223.951, 3.54743, 192.639 )
+
+[node name="Grunt3" parent="." instance=ExtResource( 11 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 223.951, 3.54743, 253.745 )
+
+[node name="Grunt4" parent="." instance=ExtResource( 11 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 316.785, 3.54743, 253.745 )
+
+[node name="Grunt5" parent="." instance=ExtResource( 11 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 316.785, 3.54743, 345.796 )
+
+[node name="Grunt6" parent="." instance=ExtResource( 11 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 316.785, 3.54743, 345.796 )
+
+[node name="Grunt7" parent="." instance=ExtResource( 11 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 128.669, 3.54743, 393.978 )
+
+[node name="Grunt8" parent="." instance=ExtResource( 11 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 84.6707, 3.54743, 271.634 )
+
+[node name="Grunt9" parent="." instance=ExtResource( 11 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 140.662, 3.54743, 271.634 )
+
+[node name="Grunt10" parent="." instance=ExtResource( 11 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 267.749, 3.54743, 393.334 )
+
+[node name="Grunt11" parent="." instance=ExtResource( 11 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 381.518, 3.54743, 393.334 )
+
+[node name="Grunt12" parent="." instance=ExtResource( 11 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 381.518, 3.54743, 268.153 )
+
+[node name="Grunt13" parent="." instance=ExtResource( 11 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 381.518, 3.54743, 268.153 )
+[connection signal="pressed" from="Player/Panel/Button" to="." method="_on_Button_pressed"]
