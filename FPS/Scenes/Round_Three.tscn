@@ -1,18 +1,19 @@
-[gd_scene load_steps=40 format=2]
+[gd_scene load_steps=41 format=2]
 
 [ext_resource path="res://Scenes/Player.tscn" type="PackedScene" id=1]
 [ext_resource path="res://addons/zylann.hterrain/hterrain.gd" type="Script" id=2]
 [ext_resource path="res://addons/zylann.hterrain/hterrain_texture_set.gd" type="Script" id=3]
 [ext_resource path="res://Terrain/Ground/data.hterrain" type="Resource" id=4]
-[ext_resource path="res://Scripts/Round_Three.gd" type="Script" id=5]
+[ext_resource path="res://Scripts/Doom_Arena.gd" type="Script" id=5]
 [ext_resource path="res://Textures/Brown_Rock/Rock029_2K_NormalDX.jpg" type="Texture" id=6]
 [ext_resource path="res://Textures/Dark_Rock/Rock031_2K_NormalGL.jpg" type="Texture" id=7]
 [ext_resource path="res://Textures/Dark_Rock/Rock031_2K_Color.jpg" type="Texture" id=8]
 [ext_resource path="res://Textures/Brown_Rock/Rock029_2K_Color.jpg" type="Texture" id=9]
 [ext_resource path="res://assets/Space_Level_Objects/Pillar_Static.tscn" type="PackedScene" id=10]
+[ext_resource path="res://Scenes/Grunt.tscn" type="PackedScene" id=11]
 [ext_resource path="res://Scenes/Ammo_Pickup.tscn" type="PackedScene" id=12]
 [ext_resource path="res://Scenes/Health_Pickup.tscn" type="PackedScene" id=13]
-[ext_resource path="res://Scenes/Pinky.tscn" type="PackedScene" id=15]
+[ext_resource path="res://Scenes/Imp.tscn" type="PackedScene" id=14]
 
 [sub_resource type="BoxShape" id=1]
 extents = Vector3( 1, 1, 0.852809 )
@@ -94,38 +95,16 @@ textures = [ [ ExtResource( 9 ), ExtResource( 8 ) ], [ ExtResource( 6 ), ExtReso
 [node name="Doom_Clone" type="Spatial"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -213.481, 0, 0 )
 script = ExtResource( 5 )
-win_scene = "res://Scenes/Win_Scene.tscn"
 
 [node name="Player" parent="." instance=ExtResource( 1 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 217.053, 1.57077, 39.6226 )
 
-[node name="Panel" type="Panel" parent="Player"]
-visible = false
-margin_left = 358.045
-margin_top = 151.24
-margin_right = 943.045
-margin_bottom = 522.24
+[node name="Control" type="Control" parent="Player"]
+margin_right = 40.0
+margin_bottom = 40.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
-
-[node name="Label" type="Label" parent="Player/Panel"]
-margin_left = 170.359
-margin_top = 121.923
-margin_right = 288.359
-margin_bottom = 181.923
-rect_scale = Vector2( 2, 2 )
-text = "Last Round
-Beware of Pinky"
-align = 1
-valign = 1
-
-[node name="Button" type="Button" parent="Player/Panel"]
-margin_left = 419.216
-margin_top = 275.58
-margin_right = 531.216
-margin_bottom = 328.58
-text = "CLOSE"
 
 [node name="Environment" type="Spatial" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 2.74052, 0, 0 )
@@ -485,6 +464,8 @@ shader_params/u_depth_blending = true
 shader_params/u_triplanar = false
 shader_params/u_tile_reduction = Plane( 0, 0, 0, 0 )
 
-[node name="Pinky" parent="." instance=ExtResource( 15 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 380.113, 13.4991, 400.78 )
-[connection signal="pressed" from="Player/Panel/Button" to="." method="_on_Button_pressed"]
+[node name="Grunt" parent="." instance=ExtResource( 11 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 184.199, 3.54743, 192.639 )
+
+[node name="Imp" parent="." instance=ExtResource( 14 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 381.422, 7.63526, 289.53 )

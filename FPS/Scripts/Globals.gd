@@ -53,21 +53,20 @@ func set_debug_display(display_on):
 			canvas_layer.add_child(debug_display)
 
 func _process(delta):
-	if process_input == true:
-		if Input.is_action_just_pressed("ui_cancel"):
-			if popup == null:
-				popup = POPUP_SCENE.instance()
+	if Input.is_action_just_pressed("ui_cancel"):
+		if popup == null:
+			popup = POPUP_SCENE.instance()
 	
-				popup.get_node("Button_quit").connect("pressed", self, "popup_quit")
-				popup.connect("popup_hide", self, "popup_closed")
-				popup.get_node("Button_resume").connect("pressed", self, "popup_closed")
+			popup.get_node("Button_quit").connect("pressed", self, "popup_quit")
+			popup.connect("popup_hide", self, "popup_closed")
+			popup.get_node("Button_resume").connect("pressed", self, "popup_closed")
 	
-				canvas_layer.add_child(popup)
-				popup.popup_centered()
+			canvas_layer.add_child(popup)
+			popup.popup_centered()
 	
-				Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+			Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 	
-				get_tree().paused = true
+			get_tree().paused = true
 
 func popup_closed():
 	get_tree().paused = false

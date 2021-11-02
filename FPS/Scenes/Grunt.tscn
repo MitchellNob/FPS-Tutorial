@@ -57,5 +57,6 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.71867, 0 )
 transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 3.47498, -2.307 )
 enabled = true
 cast_to = Vector3( 0, -3, 0 )
+
 [connection signal="body_entered" from="Vision" to="." method="_on_Vision_body_entered"]
 [connection signal="body_exited" from="Vision" to="." method="_on_Vision_body_exited"]

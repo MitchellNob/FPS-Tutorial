@@ -56,5 +56,6 @@ cast_to = Vector3( 100, 0, 0 )
 
 [node name="Eyes" type="Spatial" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.46978, 0 )
+
 [connection signal="body_entered" from="Vision" to="." method="_on_Vision_body_entered"]
 [connection signal="body_exited" from="Vision" to="." method="_on_Vision_body_exited"]
