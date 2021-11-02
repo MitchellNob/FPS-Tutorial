@@ -580,7 +580,7 @@ func Gun_Selection(button_name):
 		weapon_change_number = 3
 		print("AR")
 	elif button_name == "Secondary":
-		weapon_change_number = 2
+		weapon_change_number = 2 	
 	elif button_name == "Knife":
 		weapon_change_number = 1
 	

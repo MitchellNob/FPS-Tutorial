@@ -99,6 +99,7 @@ doom_round_1 = "res://Scenes/Round_One.tscn"
 [node name="Player" parent="." instance=ExtResource( 1 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 217.053, 1.57077, 39.6226 )
 
+<<<<<<< Updated upstream
 [node name="Tutorial" type="Control" parent="Player"]
 margin_right = 40.0
 margin_bottom = 40.0
@@ -207,6 +208,8 @@ margin_right = 531.33
 margin_bottom = 341.734
 text = "NEXT"
 
+=======
+>>>>>>> Stashed changes
 [node name="Environment" type="Spatial" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 2.74052, 0, 0 )
 
@@ -565,6 +568,7 @@ shader_params/u_depth_blending = true
 shader_params/u_triplanar = false
 shader_params/u_tile_reduction = Plane( 0, 0, 0, 0 )
 
+<<<<<<< Updated upstream
 [node name="Enemies" type="Spatial" parent="." groups=[
 "Enemies",
 ]]
@@ -574,3 +578,6 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 198.693, 3.54743, 250.255 )
 [connection signal="pressed" from="Player/Tutorial/Panel2/first_button" to="." method="_on_first_button_pressed"]
 [connection signal="pressed" from="Player/Tutorial/Panel3/second_button" to="." method="_on_second_button_pressed"]
 [connection signal="pressed" from="Player/Tutorial/Panel4/third_button" to="." method="_on_third_button_pressed"]
+=======
+[node name="Grunt" type="KinematicBody" parent="."]
+>>>>>>> Stashed changes
